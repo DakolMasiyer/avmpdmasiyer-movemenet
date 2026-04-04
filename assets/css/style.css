@@ -1044,3 +1044,70 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
   .share-bar        { justify-content: center; }
   .hero-portrait-wrap { height: 300px; }
 }
+
+
+/* ============================================================
+   SAFE SPACING + MOBILE FIX PATCH (NON-DESTRUCTIVE)
+   ============================================================ */
+
+/* ===== HERO → STATS SPACING FIX ===== */
+.hero-content {
+  padding-bottom: 40px;
+}
+
+.stats-bar {
+  margin-top: -16px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.stat-item {
+  padding: 20px 16px;
+}
+
+
+/* ===== NEWS PAGE SPACING FIX ===== */
+.news-card-date {
+  margin-bottom: 6px;
+}
+
+.post-tags,
+.news-tags {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.post-content,
+.news-content {
+  margin-top: 16px;
+}
+
+
+/* ===== MOBILE HERO FIX ===== */
+@media (max-width: 768px) {
+
+  .hero-portrait-wrap {
+    height: 320px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+  }
+
+  .hero-portrait-wrap img {
+    object-position: center 20%;
+  }
+
+  .hero-content {
+    padding-top: 20px;
+    padding-bottom: 48px;
+  }
+
+  .stats-bar {
+    margin-top: -10px;
+  }
+}

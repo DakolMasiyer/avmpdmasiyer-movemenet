@@ -1,13 +1,13 @@
 /* ============================================================
-   PMM 2027 — poster.js (Final Production Build)
+   PMM 2027 — Poster Generator (Cinematic Final Version)
 
-   Upgrades:
-   - Playfair Display (headline) + Inter (support)
-   - 2-line layout (no overflow issues)
+   Features:
+   - Playfair Display + Inter typography
+   - Cinematic green gradient extension (no harsh black block)
+   - Reduced, realistic spacing
+   - Integrated text (feels part of poster)
    - Auto-scaling for long names
-   - Dynamic canvas extension (breathing room)
-   - Clean spacing (removed forced tracking)
-   - No regressions / UI intact
+   - Stable UI (no regressions)
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let fontsReady = false;
 
-  // ================= FONT LOADING =================
+  // ===== FONT LOADING =====
   const fontPrimary = new FontFace(
     'Playfair Display',
     'url(https://fonts.gstatic.com/s/playfairdisplay/v37/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYhVY.woff2)'
@@ -51,13 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (baseImg.complete) drawPoster();
     });
 
-  // ================= BASE IMAGE =================
+  // ===== BASE IMAGE =====
   const baseImg = new Image();
   baseImg.crossOrigin = 'anonymous';
   baseImg.src = 'assets/img/poster/campaign-poster.jpg';
   baseImg.onload = () => { if (fontsReady) drawPoster(); };
 
-  // ================= LISTENERS =================
+  // ===== LISTENERS =====
   [nameInput, wardInput, lgaSelect].forEach(el => {
     if (el) el.addEventListener('input', drawPoster);
   });
@@ -66,32 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (downloadBtn) downloadBtn.addEventListener('click', downloadPoster);
   if (shareWaBtn)  shareWaBtn.addEventListener('click', shareViaWhatsApp);
 
-  // ================= HELPERS =================
-
-  function extendCanvasHeight(baseCanvas, extraHeight) {
-    const extended = document.createElement('canvas');
-    extended.width = baseCanvas.width;
-    extended.height = baseCanvas.height + extraHeight;
-
-    const ctx = extended.getContext('2d');
-    ctx.drawImage(baseCanvas, 0, 0);
-
-    const gradient = ctx.createLinearGradient(
-      0,
-      baseCanvas.height - 120,
-      0,
-      extended.height
-    );
-
-    gradient.addColorStop(0, "rgba(0,0,0,0)");
-    gradient.addColorStop(1, "rgba(0,0,0,0.9)");
-
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, baseCanvas.height - 120, extended.width, extraHeight + 120);
-
-    return extended;
-  }
-
+  // ===== AUTO TEXT FIT =====
   function fitText(ctx, text, maxWidth, baseSize) {
     let size = baseSize;
     do {
@@ -101,8 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return size;
   }
 
-  // ================= DRAW =================
-
+  // ===== DRAW POSTER =====
   function drawPoster() {
     if (!fontsReady || !baseImg.complete) return;
 
@@ -114,55 +88,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
     baseCtx.drawImage(baseImg, 0, 0, baseCanvas.width, baseCanvas.height);
 
-    // Extend canvas for breathing room
-    const extraHeight = Math.round(baseCanvas.height * 0.25);
-    const finalCanvas = extendCanvasHeight(baseCanvas, extraHeight);
-    const finalCtx = finalCanvas.getContext('2d');
+    // 🔥 CINEMATIC EXTENSION (REDUCED HEIGHT)
+    const extraHeight = Math.round(baseCanvas.height * 0.14);
+
+    const finalCanvas = document.createElement('canvas');
+    finalCanvas.width = baseCanvas.width;
+    finalCanvas.height = baseCanvas.height + extraHeight;
+
+    const ctxFinal = finalCanvas.getContext('2d');
+
+    ctxFinal.drawImage(baseCanvas, 0, 0);
 
     const W = finalCanvas.width;
     const H = finalCanvas.height;
 
-    const rawName = nameInput?.value?.trim() || 'YOUR NAME';
-    const ward = wardInput?.value?.trim();
-    const lga = lgaSelect?.value;
-
-    const nameLine = rawName.toUpperCase();
-    const supportLine = "I SUPPORT #PMM2027";
-    const locLine = [ward, lga].filter(Boolean).join(' · ');
-
-    const leftX = Math.round(W * 0.06);
-    const baseY = H - Math.round(H * 0.12);
-
-    // ===== NAME =====
-    let nameSize = fitText(
-      finalCtx,
-      nameLine,
-      W * 0.85,
-      Math.round(W * 0.045)
+    // ===== GRADIENT BLEND (MATCH POSTER GREEN) =====
+    const gradient = ctxFinal.createLinearGradient(
+      0,
+      baseCanvas.height - 80,
+      0,
+      finalCanvas.height
     );
 
-    finalCtx.font = `600 ${nameSize}px "Playfair Display", serif`;
-    finalCtx.fillStyle = "#FFFFFF";
-    finalCtx.fillText(nameLine, leftX, baseY - 30);
+    gradient.addColorStop(0, "rgba(13, 26, 16, 0)");
+    gradient.addColorStop(0.4, "rgba(25, 87, 39, 0.85)");
+    gradient.addColorStop(1, "#0d1a10");
 
-    // ===== SUPPORT LINE =====
-    finalCtx.font = `400 ${Math.round(W * 0.026)}px "Inter", sans-serif`;
-    finalCtx.fillStyle = "#FFFFFF";
-    finalCtx.fillText(supportLine, leftX, baseY + 10);
+    ctxFinal.fillStyle = gradient;
+    ctxFinal.fillRect(0, baseCanvas.height - 80, W, extraHeight + 80);
 
-    // ===== LOCATION =====
+    // ===== TEXT =====
+    const rawName = nameInput?.value?.trim() || "YOUR NAME";
+    const nameLine = rawName.toUpperCase();
+    const supportLine = "I SUPPORT #PMM2027";
+
+    const leftX = Math.round(W * 0.06);
+    const baseY = baseCanvas.height + Math.round(extraHeight * 0.55);
+
+    // NAME
+    let nameSize = fitText(ctxFinal, nameLine, W * 0.82, Math.round(W * 0.045));
+    ctxFinal.font = `600 ${nameSize}px "Playfair Display", serif`;
+    ctxFinal.fillStyle = "#FFFFFF";
+    ctxFinal.fillText(nameLine, leftX, baseY - 12);
+
+    // SUPPORT
+    ctxFinal.font = `400 ${Math.round(W * 0.025)}px "Inter", sans-serif`;
+    ctxFinal.fillStyle = "rgba(255,255,255,0.85)";
+    ctxFinal.fillText(supportLine, leftX, baseY + 18);
+
+    // LOCATION
+    const ward = wardInput?.value?.trim();
+    const lga = lgaSelect?.value;
+    const locLine = [ward, lga].filter(Boolean).join(" · ");
+
     if (locLine) {
-      finalCtx.font = `400 ${Math.round(W * 0.02)}px "Inter", sans-serif`;
-      finalCtx.fillStyle = "rgba(245,196,28,0.95)";
-      finalCtx.fillText(locLine.toUpperCase(), leftX, baseY + 45);
+      ctxFinal.font = `400 ${Math.round(W * 0.02)}px "Inter", sans-serif`;
+      ctxFinal.fillStyle = "rgba(245,196,28,0.95)";
+      ctxFinal.fillText(locLine.toUpperCase(), leftX, baseY + 42);
     }
 
-    // Push to main canvas
+    // ===== OUTPUT =====
     canvas.height = finalCanvas.height;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(finalCanvas, 0, 0);
 
-    // Preview
     if (preview) {
       preview.src = canvas.toDataURL('image/jpeg', 0.93);
     }
@@ -171,8 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (shareWaBtn) shareWaBtn.disabled = false;
   }
 
-  // ================= DOWNLOAD =================
-
+  // ===== DOWNLOAD =====
   function downloadPoster() {
     drawPoster();
     const name = (nameInput?.value || 'supporter').replace(/\s+/g, '_');
@@ -182,22 +170,12 @@ document.addEventListener('DOMContentLoaded', () => {
     a.click();
   }
 
-  // ================= WHATSAPP =================
-
+  // ===== WHATSAPP =====
   function shareViaWhatsApp() {
     const name = nameInput?.value || 'a supporter';
-    const ward = wardInput?.value;
-    const lga  = lgaSelect?.value;
-
-    const loc = [ward, lga].filter(Boolean).join(', ');
-
     const msg = encodeURIComponent(
-      `🇳🇬 ${name.toUpperCase()} I SUPPORT AVM PAUL D. MASIYER (RTD.)!\n\n` +
-      `Mangu/Bokkos · 2027` +
-      `${loc ? `\n${loc}` : ''}\n\n` +
-      `#PMM2027`
+      `${name.toUpperCase()} I SUPPORT PMM2027`
     );
-
     window.open(`https://wa.me/?text=${msg}`, '_blank');
   }
 });

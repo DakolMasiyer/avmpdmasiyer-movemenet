@@ -1,0 +1,59 @@
+[build]
+  publish = "."
+  command = ""
+
+# Clean URL rewrites — extensionless
+[[redirects]]
+  from = "/about"
+  to   = "/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/vision"
+  to   = "/vision.html"
+  status = 200
+
+[[redirects]]
+  from = "/community"
+  to   = "/community.html"
+  status = 200
+
+[[redirects]]
+  from = "/news"
+  to   = "/news.html"
+  status = 200
+
+[[redirects]]
+  from = "/poster"
+  to   = "/poster.html"
+  status = 200
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options          = "SAMEORIGIN"
+    X-XSS-Protection         = "1; mode=block"
+    X-Content-Type-Options   = "nosniff"
+    Referrer-Policy          = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control            = "public, max-age=3600"
+    Access-Control-Allow-Origin = "*"

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create My Poster — PMM 2027 | AVM Paul Masiyer Movement</title>
+  <meta name="description" content="Create your personalised PMM 2027 support poster. Add your name and ward, download, and share on WhatsApp and social media.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/logo/pmm-favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .poster-layout{display:grid;grid-template-columns:400px 1fr;gap:44px;align-items:start;}
+    .poster-controls{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;position:sticky;top:90px;}
+    .poster-controls h3{color:var(--green);margin-bottom:20px;font-size:20px;}
+    .ctrl-field{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;}
+    .ctrl-field label{font-size:10.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);}
+    .ctrl-field input,.ctrl-field select{padding:11px 14px;background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:var(--transition);}
+    .ctrl-field input:focus,.ctrl-field select:focus{border-color:var(--green);background:white;}
+    .poster-canvas-wrap{display:none;}
+    .poster-preview-wrap{border-radius:var(--radius-md);overflow:hidden;border:2px solid var(--border-gold);box-shadow:var(--shadow-lg);}
+    .poster-preview-wrap img{width:100%;height:auto;display:block;background:var(--green);}
+    .share-caption{background:var(--green-pale);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-top:8px;}
+    .share-caption p{font-size:12.5px;color:var(--ink-muted);margin:0;}
+    .caption-text{font-size:12.5px;color:var(--ink);background:white;border:1px solid var(--border);border-radius:4px;padding:10px;margin-top:8px;white-space:pre-line;line-height:1.6;}
+    @media(max-width:900px){.poster-layout{grid-template-columns:1fr;}.poster-controls{position:static;}}
+  </style>
+</head>
+<body>
+
+  <div data-include="components/navbar.html"></div>
+
+  <div class="wa-float"><div class="wa-float-tooltip">Join on WhatsApp</div>
+    <a class="wa-float-btn" href="https://wa.me/2347070609297?text=I%20want%20to%20Join%20the%20AVM%20Paul%20Masiyer%20Movement." target="_blank"><div class="wa-pulse"></div>
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="white"/></svg>
+    </a>
+  </div>
+
+  <div class="page-hero">
+    <div class="container" style="position:relative;z-index:2;">
+      <nav class="breadcrumb" style="margin-bottom:18px;"><a href="index.html">Home</a><span class="sep">›</span><span class="current">Create My Poster</span></nav>
+      <div class="label">Support Poster Generator</div>
+      <h1>Create<br><em style="color:var(--gold);">Your Poster</em></h1>
+      <p>Personalise a PMM 2027 support poster with your name and ward. Download and share everywhere to show your community you stand with Mangu/Bokkos.</p>
+    </div>
+  </div>
+
+  <section class="section" style="background:var(--cream);">
+    <div class="container">
+      <div class="poster-layout">
+        <!-- Controls -->
+        <div class="poster-controls aos">
+          <h3>Create Your Support Poster</h3>
+
+          <!-- Differentiation note -->
+          <div style="background:var(--green-pale);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:20px;">
+            <p style="font-size:12px;color:var(--green);margin:0;line-height:1.5;">
+              <strong>My Poster</strong> — the official campaign design with your name added below AVM Masiyer's name.<br>
+              Want the original poster without personalisation? <a href="assets/img/poster/campaign-poster.jpg" download="AVM-Paul-Masiyer-PMM2027.jpg" style="color:var(--gold-dark);font-weight:600;">Download here ↓</a>
+            </p>
+          </div>
+
+          <div class="ctrl-field"><label>Your Full Name</label><input type="text" id="poster-name" placeholder="Davou Mancha" maxlength="28"></div>
+          <div class="ctrl-field"><label>Your Ward</label><input type="text" id="poster-ward" placeholder="Mangu Central Ward" maxlength="24"></div>
+          <div class="ctrl-field">
+            <label>Local Government Area</label>
+            <select id="poster-lga">
+              <option value="">Select LGA</option>
+              <option>Mangu LGA</option>
+              <option>Bokkos LGA</option>
+              <option>Diaspora Supporter</option>
+            </select>
+          </div>
+          <div class="ctrl-field"><label>Personal Message (Optional)</label><input type="text" id="poster-message" placeholder="A New Dawn for Mangu/Bokkos" maxlength="38"></div>
+
+          <button class="btn btn-green" id="poster-generate" style="width:100%;justify-content:center;margin-bottom:10px;">🎨 Generate My Poster</button>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <button class="btn btn-primary" id="poster-download" disabled style="justify-content:center;">⬇️ Download My Poster (JPG)</button>
+            <button class="btn btn-outline" id="poster-share-wa" disabled style="background:rgba(37,211,102,0.08);border-color:#25d366;color:#25d366;justify-content:center;">📱 Share WhatsApp Caption</button>
+          </div>
+
+          <div class="share-caption" style="margin-top:18px;">
+            <p>📋 Copy this caption to post with your poster:</p>
+            <div class="caption-text" id="poster-caption">I SUPPORT AVM PAUL D. MASIYER (RTD.) FOR HOUSE OF REPRESENTATIVES, MANGU/BOKKOS 2027!
+
+"Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos"
+
+Join the movement:
+pmm2027.netlify.app
+
+#PMM2027 #ManguBokkos #APC2027 #LeadershipWithIntegrity</div>
+            <button class="btn btn-ghost" id="copy-caption" style="width:100%;justify-content:center;margin-top:9px;font-size:12.5px;">🔗 Copy Caption</button>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="aos aos-delay-1">
+          <div class="label" style="margin-bottom:14px;">Live Preview</div>
+          <div class="poster-preview-wrap">
+            <img id="poster-preview" src="" alt="Your PMM 2027 Poster" style="min-height:300px;background:var(--green);">
+          </div>
+          <p style="font-size:11.5px;color:var(--ink-muted);margin-top:10px;text-align:center;">1080 × 1350px — optimised for WhatsApp and Instagram</p>
+          <div class="poster-canvas-wrap"><canvas id="poster-canvas"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO SHARE -->
+  <section class="section-sm" style="background:white;">
+    <div class="container">
+      <div class="section-header aos" style="text-align:center;margin-bottom:36px;">
+        <div class="label" style="justify-content:center;">Share Guide</div>
+        <h2 style="color:var(--green);">How to Use Your Poster</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;">
+        <div style="text-align:center;padding:22px;" class="aos"><div style="font-size:32px;margin-bottom:10px;">1️⃣</div><h4 style="color:var(--green);margin-bottom:7px;">Personalise</h4><p style="font-size:12.5px;color:var(--ink-muted);">Enter your name, ward, and LGA.</p></div>
+        <div style="text-align:center;padding:22px;" class="aos aos-delay-1"><div style="font-size:32px;margin-bottom:10px;">2️⃣</div><h4 style="color:var(--green);margin-bottom:7px;">Generate</h4><p style="font-size:12.5px;color:var(--ink-muted);">Click Generate to see your poster.</p></div>
+        <div style="text-align:center;padding:22px;" class="aos aos-delay-2"><div style="font-size:32px;margin-bottom:10px;">3️⃣</div><h4 style="color:var(--green);margin-bottom:7px;">Download</h4><p style="font-size:12.5px;color:var(--ink-muted);">Save the JPG to your phone.</p></div>
+        <div style="text-align:center;padding:22px;" class="aos aos-delay-3"><div style="font-size:32px;margin-bottom:10px;">4️⃣</div><h4 style="color:var(--green);margin-bottom:7px;">Share</h4><p style="font-size:12.5px;color:var(--ink-muted);">Post on WhatsApp, Facebook, and Instagram with the caption.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div data-include="components/footer.html"></div>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/poster.js"></script>
+  <script>
+    document.getElementById('copy-caption')?.addEventListener('click', () => {
+      navigator.clipboard.writeText(document.getElementById('poster-caption').textContent).then(() => {
+        const btn = document.getElementById('copy-caption');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => btn.textContent = '🔗 Copy Caption', 2000);
+      });
+    });
+    ['poster-name','poster-ward','poster-lga'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', updateCaption);
+    });
+    function updateCaption() {
+      const name = document.getElementById('poster-name')?.value?.trim() || 'YOUR NAME';
+      const ward = document.getElementById('poster-ward')?.value?.trim();
+      const lga  = document.getElementById('poster-lga')?.value;
+      const loc  = [ward, lga].filter(Boolean).join(', ');
+      document.getElementById('poster-caption').textContent =
+        `I SUPPORT AVM PAUL D. MASIYER (RTD.) FOR HOUSE OF REPRESENTATIVES, MANGU/BOKKOS 2027!\n\n${name}${loc ? ` — ${loc}` : ''}\n\n"Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos"\n\nJoin the movement:\npmm2027.netlify.app\n\n#PMM2027 #ManguBokkos #APC2027 #LeadershipWithIntegrity`;
+    }
+  </script>
+</body>
+</html>

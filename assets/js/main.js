@@ -1,0 +1,265 @@
+/* ============================================================
+   PMM 2027 — main.js
+   Nav, AOS, language toggle (EN / Mwaghavul / Challa), share
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadComponents();
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // Mobile nav toggle
+  document.addEventListener('click', (e) => {
+    const burger = e.target.closest('.hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    if (burger && mobileNav) {
+      mobileNav.classList.toggle('open');
+      burger.classList.toggle('active');
+      const spans = burger.querySelectorAll('span');
+      if (burger.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+      } else {
+        spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+      }
+    }
+    if (e.target.closest('#mobile-nav a')) {
+      document.getElementById('mobile-nav')?.classList.remove('open');
+    }
+  });
+
+  // AOS
+  const aosEls = document.querySelectorAll('.aos');
+  if (aosEls.length) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+    aosEls.forEach(el => obs.observe(el));
+  }
+
+  // Counter animation
+  const counters = document.querySelectorAll('.stat-num[data-target]');
+  if (counters.length) {
+    const co = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); co.unobserve(e.target); } });
+    }, { threshold: 0.5 });
+    counters.forEach(el => co.observe(el));
+  }
+
+  initLanguageToggle();
+  initShareButtons();
+  setActiveNavLink();
+
+  if (document.getElementById('news-preview')) loadNewsPreview();
+
+  // Form handler
+  const form = document.getElementById('join-form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('[type="submit"]');
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+      try {
+        const res = await fetch('https://formspree.io/f/mkopqngy', {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('form-success')?.classList.add('visible');
+        } else {
+          btn.textContent = 'Error — Try Again';
+          btn.disabled = false;
+        }
+      } catch {
+        btn.textContent = 'Error — Try Again';
+        btn.disabled = false;
+      }
+    });
+  }
+});
+
+// ── COMPONENT LOADER ──────────────────────────────────────────
+async function loadComponents() {
+  const includes = document.querySelectorAll('[data-include]');
+  await Promise.all(Array.from(includes).map(async (el) => {
+    try {
+      const res = await fetch(el.getAttribute('data-include'));
+      if (res.ok) el.innerHTML = await res.text();
+    } catch {}
+  }));
+  setActiveNavLink();
+  applyLanguage(currentLang);
+}
+
+// ── COUNTER ANIMATION ──────────────────────────────────────────
+function animateCounter(el) {
+  const target = parseInt(el.getAttribute('data-target'), 10);
+  const suffix = el.getAttribute('data-suffix') || '';
+  const duration = 1800;
+  const start = performance.now();
+  const tick = (now) => {
+    const eased = 1 - Math.pow(1 - Math.min((now - start) / duration, 1), 3);
+    el.textContent = Math.round(eased * target).toLocaleString() + suffix;
+    if (eased < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+// ── LANGUAGE TOGGLE — EN / Mwaghavul (Mangu) / Challa (Bokkos) ──
+const translations = {
+  // Navigation
+  'nav-home':       { en: 'Home',          mw: 'Dang',         ch: 'Gida' },
+  'nav-about':      { en: 'About',         mw: 'Fatak',        ch: 'Game Da Shi' },
+  'nav-vision':     { en: 'Vision',        mw: 'Yar Ɓangas',   ch: 'Manufa' },
+  'nav-community':  { en: 'Community',     mw: 'Folong',       ch: 'Al\'umma' },
+  'nav-news':       { en: 'News',          mw: 'Labarai',      ch: 'Labarai' },
+  'nav-poster':     { en: 'My Poster',     mw: 'Kaat Am',      ch: 'Tabbati Na' },
+  'nav-join':       { en: 'Join PMM',      mw: 'Wur PMM',      ch: 'Shiga PMM' },
+  // Hero
+  'hero-label':     { en: 'House of Reps · Mangu/Bokkos · 2027', mw: 'Majalisar Wakilai · Mangu/Bokkos · 2027', ch: 'Majalisar Wakilai · Mangu/Bokkos · 2027' },
+  'hero-name':      { en: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>', mw: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>', ch: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>' },
+  'hero-tagline':   { en: 'Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos', mw: 'Aiki. Sadaukarwa. Alkawari. — Sabuwar Alfijir ga Mangu/Bokkos', ch: 'Hidima. Sadaukarwa. Wa\'adi. — Sabuwar Alfijir ga Mangu/Bokkos' },
+  'hero-desc':      { en: '35 years defending Nigeria. Now returning home to defend Mangu/Bokkos at the National Assembly.', mw: 'Shekaru 35 kare Najeriya. Yanzu ya dawo gida don kare Mangu/Bokkos a Majalisar Kasa.', ch: 'Shekaru 35 kare Najeriya. Yanzu ya dawo don kare Mangu/Bokkos a Majalisar Kasa.' },
+  'hero-cta-join':  { en: 'Join the Movement', mw: 'Wur Yar Ɓangas', ch: 'Shiga Kungiyar' },
+  'hero-cta-vision':{ en: 'Our Vision',         mw: 'Yar Ɓangas Mu', ch: 'Manufarmu' },
+  // Sections
+  'section-agenda': { en: 'Our 8-Pillar Agenda', mw: 'Shirye-shirye 8', ch: 'Shirye-shirye 8' },
+  'section-news':   { en: 'Latest News',          mw: 'Labarai Sabon',   ch: 'Sabbin Labarai' },
+  'section-join':   { en: 'Join the Movement',    mw: 'Wur Yar Ɓangas',  ch: 'Shiga Kungiyar' },
+  // Stats
+  'stat-years':     { en: 'Years of Service',  mw: 'Shekara Hidima', ch: 'Shekarun Hidima' },
+  'stat-wards':     { en: 'Wards Reached',     mw: 'Unguwoyi',       ch: 'Unguwanni' },
+  'stat-supporters':{ en: 'Supporters',        mw: 'Masu Goyon Baya', ch: 'Magoya Baya' },
+  'stat-pillars':   { en: 'Agenda Pillars',    mw: 'Shirye-shirye',   ch: 'Manufofi' },
+  // Form
+  'form-firstname': { en: 'First Name', mw: 'Sunan Farko',  ch: 'Sunan Farko' },
+  'form-lastname':  { en: 'Last Name',  mw: 'Sunan Iyali',  ch: 'Sunan Iyali' },
+  'form-phone':     { en: 'Phone',      mw: 'Wayar Hannu',  ch: 'Lambar Waya' },
+  'form-email':     { en: 'Email',      mw: 'Imel',         ch: 'Imel' },
+  'form-lga':       { en: 'LGA',        mw: 'Kananan Hukuma', ch: 'Kananan Hukuma' },
+  'form-ward':      { en: 'Your Ward',  mw: 'Unguwar Ka',   ch: 'Unguwar Ka' },
+  'cta-submit':     { en: 'Join the Movement', mw: 'Wur Yanzu', ch: 'Shiga Yanzu' },
+  'cta-read-more':  { en: 'Read More', mw: 'Karanta Kari',  ch: 'Karanta Ƙari' },
+};
+
+const LANGS = ['en', 'mw', 'ch'];
+const LANG_LABELS = { en: 'EN', mw: 'MW', ch: 'CH' };
+let currentLangIdx = 0;
+let currentLang = localStorage.getItem('pmm-lang') || 'en';
+currentLangIdx = LANGS.indexOf(currentLang);
+if (currentLangIdx < 0) currentLangIdx = 0;
+
+function initLanguageToggle() {
+  applyLanguage(currentLang);
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.lang-toggle')) return;
+    currentLangIdx = (currentLangIdx + 1) % LANGS.length;
+    currentLang = LANGS[currentLangIdx];
+    localStorage.setItem('pmm-lang', currentLang);
+    applyLanguage(currentLang);
+    document.querySelectorAll('.lang-toggle .lang-text').forEach(el => {
+      el.textContent = LANG_LABELS[currentLang];
+    });
+  });
+}
+
+function applyLanguage(lang) {
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    const val = translations[key]?.[lang] ?? translations[key]?.['en'];
+    if (!val) return;
+    if (el.getAttribute('data-html') === 'true') el.innerHTML = val;
+    else el.textContent = val;
+  });
+}
+
+// ── SOCIAL SHARE ──────────────────────────────────────────────
+function initShareButtons() {
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-share]');
+    if (!btn) return;
+    const platform = btn.getAttribute('data-share');
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('Join AVM Paul Masiyer (Rtd.) — A New Dawn for Mangu/Bokkos. House of Representatives 2027 #PMM2027 #ManguBokkos');
+    const waMsg = encodeURIComponent('Join the AVM Paul Masiyer Movement! 🇳🇬\n\n"Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos"\n\nAVM Paul D. Masiyer (Rtd.) — House of Representatives, Mangu/Bokkos 2027\n\nJoin us: ' + window.location.origin + '\n\n#PMM2027 #ManguBokkos #APC2027');
+
+    const urls = {
+      whatsapp: `https://wa.me/?text=${waMsg}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      twitter:  `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      copy: null
+    };
+
+    if (platform === 'copy') {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const orig = btn.innerHTML;
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => btn.innerHTML = orig, 2000);
+      });
+    } else if (urls[platform]) {
+      window.open(urls[platform], '_blank', 'width=620,height=420');
+    }
+  });
+}
+
+// ── ACTIVE NAV LINK ───────────────────────────────────────────
+function setActiveNavLink() {
+  const path = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links a, #mobile-nav a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href && (href === path || (path === '' && href === 'index.html'))) {
+      a.classList.add('active');
+    }
+  });
+}
+
+// ── NEWS PREVIEW LOADER ───────────────────────────────────────
+async function loadNewsPreview() {
+  const container = document.getElementById('news-preview');
+  if (!container) return;
+  try {
+    const res = await fetch('data/news.json');
+    const news = await res.json();
+    container.innerHTML = news.slice(0, 3).map((item, i) => `
+      <div class="news-card aos" style="transition-delay:${i * 0.1}s" onclick="void(0)">
+        <div class="news-card-img">
+          ${item.image
+            ? `<img src="${item.image}" alt="${item.title}" loading="lazy">`
+            : `<div class="news-card-img-placeholder"><span>PMM</span></div>`
+          }
+          <div class="news-card-cat">${item.category}</div>
+        </div>
+        <div class="news-card-body">
+          <div class="news-card-date">${formatDate(item.date)}</div>
+          <h3>${item.title}</h3>
+          <p>${item.excerpt}</p>
+          <a href="news.html#${item.slug}" class="news-card-link">
+            <span data-t="cta-read-more">Read More</span> →
+          </a>
+        </div>
+      </div>
+    `).join('');
+    container.querySelectorAll('.aos').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.1}s`;
+      setTimeout(() => el.classList.add('visible'), 80);
+    });
+    applyLanguage(currentLang);
+  } catch (err) {
+    console.warn('News load failed:', err);
+  }
+}
+
+// ── HELPERS ───────────────────────────────────────────────────
+function formatDate(d) {
+  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}

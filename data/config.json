@@ -1,0 +1,39 @@
+{
+  "site": {
+    "name": "AVM Paul Masiyer Movement",
+    "shortName": "PMM 2027",
+    "acronym": "PMM",
+    "tagline": "Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos",
+    "candidate": "Air Vice Marshal Paul D. Masiyer (Rtd.)",
+    "candidateShort": "AVM Masiyer",
+    "office": "House of Representatives — Mangu/Bokkos",
+    "party": "APC",
+    "state": "Plateau State, Nigeria",
+    "year": "2027",
+    "description": "Join the PMM — AVM Paul Masiyer's movement to bring 35 years of military discipline, strategic leadership, and genuine commitment back home to serve Mangu/Bokkos Federal Constituency.",
+    "url": "https://pmm2027.netlify.app"
+  },
+  "contact": {
+    "whatsapp": "+2347070609297",
+    "whatsappMessage": "I want to Join the AVM Paul Masiyer Movement.",
+    "email": "info@pmm2027.ng",
+    "formspree": "https://formspree.io/f/mkopqngy"
+  },
+  "social": {
+    "facebook": "https://facebook.com/pmm2027",
+    "twitter": "https://twitter.com/pmm2027",
+    "instagram": "https://instagram.com/pmm2027",
+    "youtube": "https://youtube.com/@pmm2027"
+  },
+  "agenda": [
+    { "icon": "🛡️", "title": "Security & Lasting Peace", "short": "The foundation on which everything else is built." },
+    { "icon": "🌾", "title": "Farming & Local Business", "short": "Federal support for the backbone of our constituency." },
+    { "icon": "🎓", "title": "Education & Healthcare", "short": "Quality schools and functional health facilities in every ward." },
+    { "icon": "💼", "title": "Youth Empowerment", "short": "Skills and opportunity so young people build Mangu/Bokkos." },
+    { "icon": "🛣️", "title": "Economic & Physical Development", "short": "Roads, utilities, and federal infrastructure investment." },
+    { "icon": "👩‍👧", "title": "Women, Elderly & Vulnerable", "short": "Federal programme access for those most often overlooked." },
+    { "icon": "🥁", "title": "Cultural Heritage", "short": "Fostering and exporting our rich identity to the world." },
+    { "icon": "📢", "title": "A Voice at the National Stage", "short": "Mangu/Bokkos heard when federal decisions are made." }
+  ],
+  "hashtags": ["#ManguBokkos", "#LeadershipWithIntegrity", "#NewDawn", "#PaulMasiyer", "#SpreadTheMessage", "#APC2027", "#ServiceAndSacrifice", "#PMM2027"]
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News &amp; Updates — PMM 2027 | AVM Paul Masiyer Movement</title>
+  <meta name="description" content="Latest news, press releases, and campaign updates from the AVM Paul Masiyer Movement — Mangu/Bokkos Federal Constituency 2027.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/logo/pmm-favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .filter-bar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:36px;}
+    .filter-btn{padding:7px 18px;border-radius:20px;font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--transition);border:1px solid var(--border);color:var(--ink-muted);background:white;font-family:'Outfit',sans-serif;}
+    .filter-btn:hover,.filter-btn.active{background:var(--green);color:white;border-color:var(--green);}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(13,26,16,0.88);z-index:2000;backdrop-filter:blur(8px);align-items:flex-start;justify-content:center;padding:36px 20px;overflow-y:auto;}
+    .modal-overlay.open{display:flex;}
+    .modal-box{background:white;border-radius:var(--radius-lg);max-width:740px;width:100%;position:relative;overflow:hidden;}
+    .modal-header{background:var(--green);padding:36px;position:relative;}
+    .modal-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,rgba(245,196,28,0.12),transparent 60%);}
+    .modal-close{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.1);color:white;font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.18);transition:var(--transition);z-index:1;}
+    .modal-close:hover{background:rgba(255,255,255,0.2);}
+    .modal-cat{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:9px;position:relative;z-index:1;}
+    .modal-title{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,30px);font-weight:700;color:white;position:relative;z-index:1;line-height:1.2;}
+    .modal-date{font-family:'DM Mono',monospace;font-size:10.5px;color:rgba(255,255,255,0.38);margin-top:10px;position:relative;z-index:1;}
+    .modal-body{padding:36px;}
+    .modal-body p{font-size:14.5px;color:var(--ink-mid);margin-bottom:14px;line-height:1.8;}
+    .modal-body ul{padding-left:18px;margin-bottom:14px;}
+    .modal-body ul li{font-size:14.5px;color:var(--ink-mid);margin-bottom:7px;}
+    .modal-footer{padding:22px 36px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .modal-footer .share-label{font-size:11.5px;color:var(--ink-muted);font-family:'DM Mono',monospace;}
+    #modal-tags{display:flex;gap:7px;flex-wrap:wrap;margin:0 36px 22px;}
+  </style>
+</head>
+<body>
+
+  <div data-include="components/navbar.html"></div>
+
+  <div class="wa-float"><div class="wa-float-tooltip">Join on WhatsApp</div>
+    <a class="wa-float-btn" href="https://wa.me/2347070609297?text=I%20want%20to%20Join%20the%20AVM%20Paul%20Masiyer%20Movement." target="_blank"><div class="wa-pulse"></div>
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="white"/></svg>
+    </a>
+  </div>
+
+  <div class="page-hero">
+    <div class="container" style="position:relative;z-index:2;">
+      <nav class="breadcrumb" style="margin-bottom:18px;"><a href="index.html">Home</a><span class="sep">›</span><span class="current">News</span></nav>
+      <div class="label">Movement Updates</div>
+      <h1>News &amp;<br><em style="color:var(--gold);">Latest Updates</em></h1>
+      <p>Campaign developments, community engagements, policy positions, and movement news from Mangu/Bokkos and beyond.</p>
+    </div>
+  </div>
+
+  <section class="section" style="background:var(--cream);">
+    <div class="container">
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All Updates</button>
+        <button class="filter-btn" data-filter="Announcement">Announcements</button>
+        <button class="filter-btn" data-filter="Policy">Policy</button>
+        <button class="filter-btn" data-filter="Community">Community</button>
+        <button class="filter-btn" data-filter="Youth">Youth</button>
+        <button class="filter-btn" data-filter="Profile">Profile</button>
+      </div>
+      <div class="news-grid" id="news-grid">
+        <div style="color:var(--ink-muted);padding:20px 0;">Loading updates...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE MODAL -->
+  <div class="modal-overlay" id="article-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-cat" id="modal-category"></div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <div class="modal-date" id="modal-date"></div>
+      </div>
+      <div id="modal-tags"></div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <span class="share-label">Share:</span>
+        <a href="#" id="modal-share-wa" target="_blank" class="share-btn wa">📱 WhatsApp</a>
+        <a href="#" id="modal-share-tw" target="_blank" class="share-btn tw">Twitter/X</a>
+        <a href="#" id="modal-share-fb" target="_blank" class="share-btn fb">Facebook</a>
+        <button class="share-btn" data-share="copy">🔗 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div data-include="components/footer.html"></div>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/ui.js"></script>
+</body>
+</html>

@@ -2,6 +2,7 @@
    PMM 2027 — main.js
    Nav, AOS, language toggle (EN / Mwaghavul / Challa), share
    ============================================================ */
+import { formatDate, LANGS, LANG_LABELS, applyLanguage } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   loadComponents();
@@ -62,28 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Form handler
   const form = document.getElementById('join-form');
   if (form) {
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const btn = form.querySelector('[type="submit"]');
-      btn.textContent = 'Submitting...';
-      btn.disabled = true;
-      try {
-        const res = await fetch('https://formspree.io/f/mkopqngy', {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        });
-        if (res.ok) {
-          form.style.display = 'none';
-          document.getElementById('form-success')?.classList.add('visible');
-        } else {
-          btn.textContent = 'Error — Try Again';
-          btn.disabled = false;
-        }
-      } catch {
-        btn.textContent = 'Error — Try Again';
-        btn.disabled = false;
-      }
+      submitJoinForm(form);
     });
   }
 });
@@ -102,7 +84,7 @@ async function loadComponents() {
 }
 
 // ── COUNTER ANIMATION ──────────────────────────────────────────
-function animateCounter(el) {
+export function animateCounter(el) {
   const target = parseInt(el.getAttribute('data-target'), 10);
   const suffix = el.getAttribute('data-suffix') || '';
   const duration = 1800;
@@ -116,44 +98,6 @@ function animateCounter(el) {
 }
 
 // ── LANGUAGE TOGGLE — EN / Mwaghavul (Mangu) / Challa (Bokkos) ──
-const translations = {
-  // Navigation
-  'nav-home':       { en: 'Home',          mw: 'Dang',         ch: 'Gida' },
-  'nav-about':      { en: 'About',         mw: 'Fatak',        ch: 'Game Da Shi' },
-  'nav-vision':     { en: 'Vision',        mw: 'Yar Ɓangas',   ch: 'Manufa' },
-  'nav-community':  { en: 'Community',     mw: 'Folong',       ch: 'Al\'umma' },
-  'nav-news':       { en: 'News',          mw: 'Labarai',      ch: 'Labarai' },
-  'nav-poster':     { en: 'My Poster',     mw: 'Kaat Am',      ch: 'Tabbati Na' },
-  'nav-join':       { en: 'Join PMM',      mw: 'Wur PMM',      ch: 'Shiga PMM' },
-  // Hero
-  'hero-label':     { en: 'House of Reps · Mangu/Bokkos · 2027', mw: 'Majalisar Wakilai · Mangu/Bokkos · 2027', ch: 'Majalisar Wakilai · Mangu/Bokkos · 2027' },
-  'hero-name':      { en: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>', mw: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>', ch: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>' },
-  'hero-tagline':   { en: 'Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos', mw: 'Aiki. Sadaukarwa. Alkawari. — Sabuwar Alfijir ga Mangu/Bokkos', ch: 'Hidima. Sadaukarwa. Wa\'adi. — Sabuwar Alfijir ga Mangu/Bokkos' },
-  'hero-desc':      { en: '35 years defending Nigeria. Now returning home to defend Mangu/Bokkos at the National Assembly.', mw: 'Shekaru 35 kare Najeriya. Yanzu ya dawo gida don kare Mangu/Bokkos a Majalisar Kasa.', ch: 'Shekaru 35 kare Najeriya. Yanzu ya dawo don kare Mangu/Bokkos a Majalisar Kasa.' },
-  'hero-cta-join':  { en: 'Join the Movement', mw: 'Wur Yar Ɓangas', ch: 'Shiga Kungiyar' },
-  'hero-cta-vision':{ en: 'Our Vision',         mw: 'Yar Ɓangas Mu', ch: 'Manufarmu' },
-  // Sections
-  'section-agenda': { en: 'Our 8-Pillar Agenda', mw: 'Shirye-shirye 8', ch: 'Shirye-shirye 8' },
-  'section-news':   { en: 'Latest News',          mw: 'Labarai Sabon',   ch: 'Sabbin Labarai' },
-  'section-join':   { en: 'Join the Movement',    mw: 'Wur Yar Ɓangas',  ch: 'Shiga Kungiyar' },
-  // Stats
-  'stat-years':     { en: 'Years of Service',  mw: 'Shekara Hidima', ch: 'Shekarun Hidima' },
-  'stat-wards':     { en: 'Wards Reached',     mw: 'Unguwoyi',       ch: 'Unguwanni' },
-  'stat-supporters':{ en: 'Supporters',        mw: 'Masu Goyon Baya', ch: 'Magoya Baya' },
-  'stat-pillars':   { en: 'Agenda Pillars',    mw: 'Shirye-shirye',   ch: 'Manufofi' },
-  // Form
-  'form-firstname': { en: 'First Name', mw: 'Sunan Farko',  ch: 'Sunan Farko' },
-  'form-lastname':  { en: 'Last Name',  mw: 'Sunan Iyali',  ch: 'Sunan Iyali' },
-  'form-phone':     { en: 'Phone',      mw: 'Wayar Hannu',  ch: 'Lambar Waya' },
-  'form-email':     { en: 'Email',      mw: 'Imel',         ch: 'Imel' },
-  'form-lga':       { en: 'LGA',        mw: 'Kananan Hukuma', ch: 'Kananan Hukuma' },
-  'form-ward':      { en: 'Your Ward',  mw: 'Unguwar Ka',   ch: 'Unguwar Ka' },
-  'cta-submit':     { en: 'Join the Movement', mw: 'Wur Yanzu', ch: 'Shiga Yanzu' },
-  'cta-read-more':  { en: 'Read More', mw: 'Karanta Kari',  ch: 'Karanta Ƙari' },
-};
-
-const LANGS = ['en', 'mw', 'ch'];
-const LANG_LABELS = { en: 'EN', mw: 'MW', ch: 'CH' };
 let currentLangIdx = 0;
 let currentLang = localStorage.getItem('pmm-lang') || 'en';
 currentLangIdx = LANGS.indexOf(currentLang);
@@ -170,16 +114,6 @@ function initLanguageToggle() {
     document.querySelectorAll('.lang-toggle .lang-text').forEach(el => {
       el.textContent = LANG_LABELS[currentLang];
     });
-  });
-}
-
-function applyLanguage(lang) {
-  document.querySelectorAll('[data-t]').forEach(el => {
-    const key = el.getAttribute('data-t');
-    const val = translations[key]?.[lang] ?? translations[key]?.['en'];
-    if (!val) return;
-    if (el.getAttribute('data-html') === 'true') el.innerHTML = val;
-    else el.textContent = val;
   });
 }
 
@@ -213,14 +147,50 @@ function initShareButtons() {
 }
 
 // ── ACTIVE NAV LINK ───────────────────────────────────────────
-function setActiveNavLink() {
-  const path = window.location.pathname.split('/').pop() || 'index.html';
+/**
+ * Marks the nav link matching the current page as active.
+ * Handles all three URL forms Netlify may serve:
+ *   /news.html  →  news.html
+ *   /news       →  news.html  (pretty URL without trailing slash)
+ *   /news/      →  news.html  (pretty URL with trailing slash)
+ *   /           →  index.html
+ */
+export function setActiveNavLink() {
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  let seg = parts.pop() || 'index.html';
+  if (!seg.includes('.')) seg += '.html';
   document.querySelectorAll('.nav-links a, #mobile-nav a').forEach(a => {
     const href = a.getAttribute('href');
-    if (href && (href === path || (path === '' && href === 'index.html'))) {
-      a.classList.add('active');
-    }
+    if (href && href === seg) a.classList.add('active');
   });
+}
+
+// ── FORM SUBMISSION ───────────────────────────────────────────
+/**
+ * Submits the join form to Formspree.
+ * Extracted as a named export so it can be unit-tested with a mocked fetch.
+ */
+export async function submitJoinForm(form) {
+  const btn = form.querySelector('[type="submit"]');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/mkopqngy', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('form-success')?.classList.add('visible');
+    } else {
+      btn.textContent = 'Error — Try Again';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Error — Try Again';
+    btn.disabled = false;
+  }
 }
 
 // ── NEWS PREVIEW LOADER ───────────────────────────────────────
@@ -257,9 +227,4 @@ async function loadNewsPreview() {
   } catch (err) {
     console.warn('News load failed:', err);
   }
-}
-
-// ── HELPERS ───────────────────────────────────────────────────
-function formatDate(d) {
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 }

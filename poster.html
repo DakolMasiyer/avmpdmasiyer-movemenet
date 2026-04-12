@@ -123,8 +123,8 @@ pmm2027.netlify.app
   </section>
 
   <div data-include="components/footer.html"></div>
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/poster.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/poster.js"></script>
   <script>
     document.getElementById('copy-caption')?.addEventListener('click', () => {
       navigator.clipboard.writeText(document.getElementById('poster-caption').textContent).then(() => {

@@ -1,6 +1,7 @@
 /* ============================================================
    PMM 2027 — ui.js  |  News page rendering + article modal
    ============================================================ */
+import { formatDate } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('news-grid'))    loadNewsPage();
@@ -37,7 +38,7 @@ async function loadNewsPage() {
   }
 }
 
-function renderNews(news, grid) {
+export function renderNews(news, grid) {
   if (!news.length) {
     grid.innerHTML = '<p style="color:var(--ink-muted);padding:32px 0;">No articles in this category yet.</p>';
     return;
@@ -65,12 +66,38 @@ function renderNews(news, grid) {
   window._newsData = news;
 }
 
-function openArticle(slug) {
+export function openArticle(slug) {
   const article = window._newsData?.find(n => n.slug === slug);
   if (article) openModal(article);
 }
 
-function openModal(article) {
+// ── ARTICLE BODY PARSER ───────────────────────────────────────
+/**
+ * Converts raw article body text to HTML.
+ *
+ * Rules:
+ *  - Paragraphs are separated by double newlines.
+ *  - A paragraph whose first non-whitespace character is "-" or "•"
+ *    is rendered as a <ul> list; each line becomes a <li>.
+ *  - Empty paragraphs (from extra blank lines) are silently dropped.
+ *  - Null / undefined / empty input returns "".
+ *
+ * Exported for unit testing.
+ */
+export function parseBody(bodyText) {
+  if (!bodyText) return '';
+  return bodyText
+    .split('\n\n')
+    .filter(para => para.trim())
+    .map(para =>
+      para.trim().startsWith('-') || para.trim().startsWith('•')
+        ? `<ul>${para.split('\n').filter(l => l.trim()).map(l => `<li>${l.replace(/^[-•]\s*/, '')}</li>`).join('')}</ul>`
+        : `<p>${para}</p>`
+    )
+    .join('');
+}
+
+export function openModal(article) {
   const modal = document.getElementById('article-modal');
   if (!modal) return;
 
@@ -79,11 +106,7 @@ function openModal(article) {
   modal.querySelector('#modal-title').textContent     = article.title;
 
   const body = modal.querySelector('#modal-body');
-  body.innerHTML = article.body.split('\n\n').map(para =>
-    para.trim().startsWith('-') || para.trim().startsWith('•')
-      ? `<ul>${para.split('\n').filter(l => l.trim()).map(l => `<li>${l.replace(/^[-•]\s*/, '')}</li>`).join('')}</ul>`
-      : `<p>${para}</p>`
-  ).join('');
+  body.innerHTML = parseBody(article.body);
 
   const tagsEl = modal.querySelector('#modal-tags');
   if (tagsEl && article.tags) {
@@ -107,23 +130,19 @@ function openModal(article) {
   );
 }
 
-function initModal() {
+export function initModal() {
   const modal = document.getElementById('article-modal');
   modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
   modal.querySelector('.modal-close')?.addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 }
 
-function closeModal() {
+export function closeModal() {
   const modal = document.getElementById('article-modal');
   if (!modal) return;
   modal.classList.remove('open');
   document.body.style.overflow = '';
   history.pushState(null, '', window.location.pathname);
-}
-
-function formatDate(d) {
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 window.openArticle = openArticle;

@@ -8,6 +8,7 @@
    - Integrates text into poster visually
    - Keeps original structure (no regressions)
    ============================================================ */
+import { fitText } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('poster-canvas');
@@ -66,16 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (downloadBtn) downloadBtn.addEventListener('click', downloadPoster);
   if (shareWaBtn)  shareWaBtn.addEventListener('click', shareViaWhatsApp);
 
-  // ===== TEXT FIT =====
-  function fitText(ctx, text, maxWidth, baseSize) {
-    let size = baseSize;
-    do {
-      ctx.font = `600 ${size}px "Playfair Display", serif`;
-      size--;
-    } while (ctx.measureText(text).width > maxWidth && size > 10);
-    return size;
-  }
-
   // ===== DRAW =====
   function drawPoster() {
     const W = canvas.width;
@@ -113,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const leftX = Math.round(W * 0.055);
     const baseY = H - Math.round(H * 0.08);
 
-    // NAME
+    // NAME — fitText imported from utils.js (off-by-one fixed)
     let nameSize = fitText(ctx, nameLine, W * 0.82, Math.round(W * 0.045));
     ctx.font = `600 ${nameSize}px "Playfair Display", serif`;
     ctx.fillStyle = "#FFFFFF";

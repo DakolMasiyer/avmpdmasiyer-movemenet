@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { setActiveNavLink, submitJoinForm } from '../assets/js/main.js';
+import { setActiveNavLink, submitJoinForm, randomizeTestimonials } from '../assets/js/main.js';
 
 // ── Helpers ───────────────────────────────────────────────────
 const NAV_HTML = `
@@ -149,5 +149,65 @@ describe('submitJoinForm', () => {
     await submitJoinForm(form);
     expect(successEl.classList.contains('visible')).toBe(false);
     vi.unstubAllGlobals();
+  });
+});
+
+// ── randomizeTestimonials ─────────────────────────────────────
+const TESTIMONIAL_GRID_HTML = `
+  <div id="testimonials-grid">
+    <div class="testimonial-card" data-testimonial="0">
+      <p class="testimonial-text">Quote 1</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">X</div>
+        <div>
+          <div class="testimonial-name">Old Name 1</div>
+          <div class="testimonial-role">Old Role 1</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card" data-testimonial="1">
+      <p class="testimonial-text">Quote 2</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">Y</div>
+        <div>
+          <div class="testimonial-name">Old Name 2</div>
+          <div class="testimonial-role">Old Role 2</div>
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+
+describe('randomizeTestimonials', () => {
+  beforeEach(() => {
+    document.body.innerHTML = TESTIMONIAL_GRID_HTML;
+  });
+
+  it('replaces the name, initial and role on each testimonial card', () => {
+    randomizeTestimonials();
+    const cards = document.querySelectorAll('[data-testimonial]');
+    cards.forEach(card => {
+      expect(card.querySelector('.testimonial-name').textContent).not.toBe('Old Name 1');
+      expect(card.querySelector('.testimonial-name').textContent).not.toBe('Old Name 2');
+      expect(card.querySelector('.testimonial-avatar').textContent).toMatch(/^[A-Z]$/);
+    });
+  });
+
+  it('preserves the quote text exactly', () => {
+    randomizeTestimonials();
+    const quotes = [...document.querySelectorAll('.testimonial-text')].map(el => el.textContent);
+    expect(quotes).toContain('Quote 1');
+    expect(quotes).toContain('Quote 2');
+  });
+
+  it('uses distinct names for each card (pool is large enough)', () => {
+    randomizeTestimonials();
+    const names = [...document.querySelectorAll('.testimonial-name')].map(el => el.textContent);
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  it('does nothing when the grid is absent', () => {
+    document.body.innerHTML = '';
+    expect(() => randomizeTestimonials()).not.toThrow();
   });
 });

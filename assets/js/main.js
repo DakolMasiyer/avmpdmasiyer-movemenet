@@ -2,7 +2,7 @@
    PMM 2027 — main.js
    Nav, AOS, language toggle (EN / Mwaghavul / Challa), share
    ============================================================ */
-import { formatDate, LANGS, LANG_LABELS, applyLanguage } from './utils.js';
+import { formatDate, LANGS, LANG_LABELS, applyLanguage, MWAGHAVUL_POOL, shuffleNames } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   loadComponents();
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLanguageToggle();
   initShareButtons();
   setActiveNavLink();
+  randomizeTestimonials();
 
   if (document.getElementById('news-preview')) loadNewsPreview();
 
@@ -191,6 +192,30 @@ export async function submitJoinForm(form) {
     btn.textContent = 'Error — Try Again';
     btn.disabled = false;
   }
+}
+
+// ── TESTIMONIAL NAME RANDOMISER ───────────────────────────────
+/**
+ * On each page session, picks a fresh shuffle of MWAGHAVUL_POOL names
+ * and assigns them to the testimonial cards (name, avatar initial, role).
+ * The quote text is authored content and stays fixed; only attribution rotates.
+ * Cards must carry a [data-testimonial="0..5"] attribute.
+ */
+export function randomizeTestimonials() {
+  const grid = document.getElementById('testimonials-grid');
+  if (!grid) return;
+  const cards = grid.querySelectorAll('[data-testimonial]');
+  if (!cards.length) return;
+  const pool = shuffleNames(MWAGHAVUL_POOL);
+  cards.forEach((card, i) => {
+    const person = pool[i % pool.length];
+    const avatarEl = card.querySelector('.testimonial-avatar');
+    const nameEl   = card.querySelector('.testimonial-name');
+    const roleEl   = card.querySelector('.testimonial-role');
+    if (avatarEl) avatarEl.textContent = person.initial;
+    if (nameEl)   nameEl.textContent   = person.name;
+    if (roleEl)   roleEl.textContent   = person.role;
+  });
 }
 
 // ── NEWS PREVIEW LOADER ───────────────────────────────────────

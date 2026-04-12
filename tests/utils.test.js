@@ -6,6 +6,8 @@ import {
   LANG_LABELS,
   translations,
   fitText,
+  MWAGHAVUL_POOL,
+  shuffleNames,
 } from '../assets/js/utils.js';
 
 // ── formatDate ────────────────────────────────────────────────
@@ -189,5 +191,47 @@ describe('fitText', () => {
     const size = fitText(ctx, 'Test', 500, 42);
     // The font property should reflect exactly the returned size
     expect(ctx.font).toContain(`${size}px`);
+  });
+});
+
+// ── MWAGHAVUL_POOL & shuffleNames ────────────────────────────
+describe('MWAGHAVUL_POOL', () => {
+  it('contains at least 12 entries', () => {
+    expect(MWAGHAVUL_POOL.length).toBeGreaterThanOrEqual(12);
+  });
+
+  it('every entry has name, initial, and role', () => {
+    MWAGHAVUL_POOL.forEach(p => {
+      expect(typeof p.name).toBe('string');
+      expect(p.name.length).toBeGreaterThan(0);
+      expect(typeof p.initial).toBe('string');
+      expect(p.initial.length).toBe(1);
+      expect(typeof p.role).toBe('string');
+      expect(p.role.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('no duplicate names in the pool', () => {
+    const names = MWAGHAVUL_POOL.map(p => p.name);
+    expect(new Set(names).size).toBe(names.length);
+  });
+});
+
+describe('shuffleNames', () => {
+  it('returns an array of the same length', () => {
+    expect(shuffleNames(MWAGHAVUL_POOL).length).toBe(MWAGHAVUL_POOL.length);
+  });
+
+  it('contains the same elements (no items added or removed)', () => {
+    const shuffled = shuffleNames(MWAGHAVUL_POOL);
+    const originalNames = MWAGHAVUL_POOL.map(p => p.name).sort();
+    const shuffledNames  = shuffled.map(p => p.name).sort();
+    expect(shuffledNames).toEqual(originalNames);
+  });
+
+  it('does not mutate the original array', () => {
+    const original = MWAGHAVUL_POOL.slice();
+    shuffleNames(MWAGHAVUL_POOL);
+    expect(MWAGHAVUL_POOL).toEqual(original);
   });
 });

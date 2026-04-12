@@ -8,7 +8,7 @@
    - Integrates text into poster visually
    - Keeps original structure (no regressions)
    ============================================================ */
-import { fitText } from './utils.js';
+import { fitText, MWAGHAVUL_POOL } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('poster-canvas');
@@ -26,6 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const downloadBtn = document.getElementById('poster-download');
   const shareWaBtn  = document.getElementById('poster-share-wa');
   const preview     = document.getElementById('poster-preview');
+
+  // Cycle the name-input placeholder through local names each session
+  if (nameInput) {
+    const sample = MWAGHAVUL_POOL[Math.floor(Math.random() * MWAGHAVUL_POOL.length)];
+    nameInput.placeholder = sample.name;
+  }
 
   let fontsReady = false;
 

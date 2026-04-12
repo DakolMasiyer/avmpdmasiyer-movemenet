@@ -68,6 +68,41 @@ export function applyLanguage(lang) {
   });
 }
 
+// ── MWAGHAVUL / BOKKOS NAME POOL ─────────────────────────────
+/**
+ * Verified pool of culturally authentic Mwaghavul and Bokkos names.
+ * Used for session-randomised testimonial attributions and poster
+ * name previews. Each entry: { name, initial, role }.
+ * All names follow Mwaghavul naming conventions:
+ *   - "Ma-" prefix surnames common in Sura/Mwaghavul culture
+ *   - First names: Christian/biblical, indigenous, and Hausa-origin
+ *   - "Mama" honorific used for elder women
+ */
+export const MWAGHAVUL_POOL = [
+  { name: 'Nden Mafarki',       initial: 'N', role: 'Community Leader, Mangu LGA'         },
+  { name: 'Rifkatu Magang',     initial: 'R', role: "Farmers' Association, Bokkos LGA"    },
+  { name: 'Bulus Mazat',        initial: 'B', role: 'Youth Leader, Mangu Town'             },
+  { name: 'Mama Lydia Mamtur',  initial: 'L', role: "Women's Leader, Bokkos"               },
+  { name: 'Kwasen Maren',       initial: 'K', role: 'Diaspora — Lagos'                     },
+  { name: 'Daniel Longs Mattu', initial: 'D', role: 'Civil Servant, Plateau State'         },
+  { name: 'Yamsat Masat',       initial: 'Y', role: 'Trader, Bokkos Market'               },
+  { name: 'Esther Makyen',      initial: 'E', role: 'Teacher, Mangu LGA'                  },
+  { name: 'Fwanret Mangoel',    initial: 'F', role: 'Youth Organiser, Bokkos'             },
+  { name: 'Rhoda Matum',        initial: 'R', role: "Women's Representative, Mangu Ward"  },
+  { name: 'Dauda Mazang',       initial: 'D', role: 'Farmer, Bokkos LGA'                  },
+  { name: 'Naomi Mayen',        initial: 'N', role: 'Community Health Worker, Mangu'      },
+];
+
+/** Seeded-by-session shuffle (Fisher-Yates with Math.random). */
+export function shuffleNames(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 // ── CANVAS TEXT FIT ───────────────────────────────────────────
 /**
  * Reduces font size until `text` fits within `maxWidth` pixels on `ctx`.

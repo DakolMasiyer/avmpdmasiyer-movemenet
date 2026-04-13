@@ -8,28 +8,43 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('article-modal')) initModal();
 });
 
+// ── DEBOUNCE ──────────────────────────────────────────────────
+function debounce(fn, ms) {
+  let id;
+  return (...args) => { clearTimeout(id); id = setTimeout(() => fn(...args), ms); };
+}
+
+// ── NEWS PAGE LOADER ──────────────────────────────────────────
 async function loadNewsPage() {
-  const grid      = document.getElementById('news-grid');
+  const grid       = document.getElementById('news-grid');
   const filterBtns = document.querySelectorAll('[data-filter]');
+  const searchInput = document.getElementById('news-search');
   let allNews = [];
 
   try {
     const res = await fetch('data/news.json');
     allNews = await res.json();
     renderNews(allNews, grid);
+    updateFilterCounts(allNews);
   } catch {
     grid.innerHTML = '<p style="color:var(--ink-muted);padding:32px 0;">Could not load news. Please refresh.</p>';
     return;
   }
 
+  // Combined apply function — reads current filter + search state
+  const apply = () => applyFiltersAndSearch(allNews, grid);
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const cat = btn.getAttribute('data-filter');
-      renderNews(cat === 'all' ? allNews : allNews.filter(n => n.category === cat), grid);
+      apply();
     });
   });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', debounce(apply, 200));
+  }
 
   const hash = window.location.hash.replace('#', '');
   if (hash) {
@@ -38,9 +53,103 @@ async function loadNewsPage() {
   }
 }
 
+// ── FILTER + SEARCH COMBINATOR ────────────────────────────────
+/**
+ * Reads the currently active filter button value and the search input,
+ * applies both (AND logic), re-renders the grid, and updates the results count.
+ * Exported for testability.
+ */
+export function applyFiltersAndSearch(allNews, grid) {
+  const activeBtn   = document.querySelector('[data-filter].active');
+  const filterValue = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+  const query       = (document.getElementById('news-search')?.value ?? '').trim();
+
+  let results = allNews.filter(a => matchesFilter(a, filterValue));
+  if (query) results = searchNews(results, query);
+
+  renderNews(results, grid);
+  updateResultsCount(results.length, allNews.length, query, filterValue);
+}
+
+// ── FILTER MATCHER ────────────────────────────────────────────
+/**
+ * Returns true if `article` matches the given filter value.
+ * `filterValue` may be:
+ *   - "all"                     → always matches
+ *   - "Security"                → exact category match
+ *   - "Campaign|Announcement"   → matches any listed category (pipe-delimited)
+ * Exported for unit testing.
+ */
+export function matchesFilter(article, filterValue) {
+  if (!filterValue || filterValue === 'all') return true;
+  const cats = filterValue.split('|').map(s => s.trim());
+  return cats.includes(article.category);
+}
+
+// ── SEARCH ────────────────────────────────────────────────────
+/**
+ * Returns articles where `query` appears (case-insensitive) in any of:
+ * title, excerpt, or tags (joined as a string).
+ * An empty/blank query returns all articles unchanged.
+ * Exported for unit testing.
+ */
+export function searchNews(articles, query) {
+  if (!query || !query.trim()) return articles;
+  const q = query.trim().toLowerCase();
+  return articles.filter(a => {
+    const haystack = [
+      a.title   ?? '',
+      a.excerpt ?? '',
+      (a.tags   ?? []).join(' '),
+    ].join(' ').toLowerCase();
+    return haystack.includes(q);
+  });
+}
+
+// ── FILTER COUNT BADGES ───────────────────────────────────────
+/**
+ * Computes how many articles match each filter button and injects
+ * (or updates) a <span class="count-badge"> inside each button.
+ */
+export function updateFilterCounts(allNews) {
+  document.querySelectorAll('[data-filter]').forEach(btn => {
+    const filterValue = btn.getAttribute('data-filter');
+    const count = filterValue === 'all'
+      ? allNews.length
+      : allNews.filter(a => matchesFilter(a, filterValue)).length;
+
+    let badge = btn.querySelector('.count-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'count-badge';
+      btn.appendChild(badge);
+    }
+    badge.textContent = count;
+  });
+}
+
+// ── RESULTS COUNT LINE ────────────────────────────────────────
+function updateResultsCount(showing, total, query, filterValue) {
+  const el = document.getElementById('results-count');
+  if (!el) return;
+  // Hide when showing everything with no search active
+  if (showing === total && !query && filterValue === 'all') {
+    el.textContent = '';
+    return;
+  }
+  if (showing === 0) {
+    el.textContent = query
+      ? `No articles found for "${query}"`
+      : 'No articles in this category yet.';
+  } else {
+    el.textContent = `Showing ${showing} of ${total} article${total !== 1 ? 's' : ''}`;
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────────────
 export function renderNews(news, grid) {
   if (!news.length) {
-    grid.innerHTML = '<p style="color:var(--ink-muted);padding:32px 0;">No articles in this category yet.</p>';
+    grid.innerHTML = '<p style="color:var(--ink-muted);padding:32px 0;">No articles found.</p>';
     return;
   }
   grid.innerHTML = news.map((item, i) => `

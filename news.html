@@ -24,6 +24,11 @@
     .filter-btn:hover,.filter-btn.active{background:var(--green);color:white;border-color:var(--green);}
     .count-badge{font-size:10px;font-weight:600;background:rgba(0,0,0,0.12);border-radius:10px;padding:1px 6px;min-width:18px;text-align:center;line-height:1.6;}
     .filter-btn.active .count-badge{background:rgba(255,255,255,0.22);}
+    /* ── Sort bar ── */
+    .sort-bar{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+    .sort-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;}
+    .sort-bar select{padding:7px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink);background:white;outline:none;cursor:pointer;transition:var(--transition);}
+    .sort-bar select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(25,87,39,0.08);}
     /* ── Results count ── */
     .results-count{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--ink-muted);margin-bottom:24px;min-height:18px;}
     /* ── Modal ── */
@@ -78,6 +83,15 @@
         <button class="filter-btn" data-filter="Community|Humanitarian|Agriculture">Community</button>
         <button class="filter-btn" data-filter="Analysis|Policy">Analysis</button>
         <button class="filter-btn" data-filter="Profile|Youth">Profile</button>
+      </div>
+      <div class="sort-bar">
+        <label for="news-sort" class="sort-label">Sort:</label>
+        <select id="news-sort" aria-label="Sort articles">
+          <option value="date-desc">Newest First</option>
+          <option value="date-asc">Oldest First</option>
+          <option value="alpha-asc">A → Z</option>
+          <option value="alpha-desc">Z → A</option>
+        </select>
       </div>
       <div id="results-count" class="results-count"></div>
       <div class="news-grid" id="news-grid">

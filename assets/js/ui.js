@@ -31,7 +31,7 @@ async function loadNewsPage() {
     return;
   }
 
-  // Combined apply function — reads current filter + search state
+  // Combined apply function — reads current filter + search + sort state
   const apply = () => applyFiltersAndSearch(allNews, grid);
 
   filterBtns.forEach(btn => {
@@ -45,6 +45,9 @@ async function loadNewsPage() {
   if (searchInput) {
     searchInput.addEventListener('input', apply);
   }
+
+  const sortSelect = document.getElementById('news-sort');
+  if (sortSelect) sortSelect.addEventListener('change', apply);
 
   const hash = window.location.hash.replace('#', '');
   if (hash) {
@@ -63,9 +66,11 @@ export function applyFiltersAndSearch(allNews, grid) {
   const activeBtn   = document.querySelector('[data-filter].active');
   const filterValue = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
   const query       = (document.getElementById('news-search')?.value ?? '').trim();
+  const sortValue   = document.getElementById('news-sort')?.value ?? 'date-desc';
 
   let results = allNews.filter(a => matchesFilter(a, filterValue));
   if (query) results = searchNews(results, query);
+  results = sortNews(results, sortValue);
 
   renderNews(results, grid);
   updateResultsCount(results.length, allNews.length, query, filterValue);
@@ -105,6 +110,25 @@ export function searchNews(articles, query) {
     ].join(' ').toLowerCase();
     return haystack.includes(q);
   });
+}
+
+// ── SORT ──────────────────────────────────────────────────────
+/**
+ * Returns a sorted copy of `articles` according to `sortValue`:
+ *   "date-desc"  → newest first  (default)
+ *   "date-asc"   → oldest first
+ *   "alpha-asc"  → A → Z by title
+ *   "alpha-desc" → Z → A by title
+ * Never mutates the input array.
+ * Exported for unit testing.
+ */
+export function sortNews(articles, sortValue) {
+  const arr = articles.slice();
+  if (sortValue === 'date-asc')   return arr.sort((a, b) => a.date.localeCompare(b.date));
+  if (sortValue === 'date-desc')  return arr.sort((a, b) => b.date.localeCompare(a.date));
+  if (sortValue === 'alpha-asc')  return arr.sort((a, b) => a.title.localeCompare(b.title));
+  if (sortValue === 'alpha-desc') return arr.sort((a, b) => b.title.localeCompare(a.title));
+  return arr;
 }
 
 // ── FILTER COUNT BADGES ───────────────────────────────────────

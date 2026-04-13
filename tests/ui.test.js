@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseBody, matchesFilter, searchNews } from '../assets/js/ui.js';
+import { parseBody, matchesFilter, searchNews, sortNews } from '../assets/js/ui.js';
 
 // ── parseBody ─────────────────────────────────────────────────
 describe('parseBody', () => {
@@ -178,5 +178,66 @@ describe('searchNews', () => {
   it('body search is case-insensitive', () => {
     expect(searchNews(ARTICLES, 'MIDNIGHT')).toHaveLength(1);
     expect(searchNews(ARTICLES, 'midnight')).toHaveLength(1);
+  });
+});
+
+// ── sortNews ──────────────────────────────────────────────────
+const SORT_ARTICLES = [
+  makeArticle('Zebra Story',  'last excerpt',  [], '2026-04-01'),
+  makeArticle('Alpha Article','first excerpt', [], '2024-01-15'),
+  makeArticle('Middle Post',  'mid excerpt',   [], '2025-06-20'),
+];
+
+// Override makeArticle to accept a date parameter for sort tests
+function makeDated(title, date) {
+  return { title, date, excerpt: '', tags: [], body: '', category: 'Test' };
+}
+const DATED = [
+  makeDated('Zebra Story',   '2026-04-01'),
+  makeDated('Alpha Article', '2024-01-15'),
+  makeDated('Middle Post',   '2025-06-20'),
+];
+
+describe('sortNews', () => {
+  it('date-desc returns newest article first', () => {
+    const result = sortNews(DATED, 'date-desc');
+    expect(result[0].date).toBe('2026-04-01');
+    expect(result[result.length - 1].date).toBe('2024-01-15');
+  });
+
+  it('date-asc returns oldest article first', () => {
+    const result = sortNews(DATED, 'date-asc');
+    expect(result[0].date).toBe('2024-01-15');
+    expect(result[result.length - 1].date).toBe('2026-04-01');
+  });
+
+  it('alpha-asc returns articles A → Z by title', () => {
+    const result = sortNews(DATED, 'alpha-asc');
+    expect(result[0].title).toBe('Alpha Article');
+    expect(result[result.length - 1].title).toBe('Zebra Story');
+  });
+
+  it('alpha-desc returns articles Z → A by title', () => {
+    const result = sortNews(DATED, 'alpha-desc');
+    expect(result[0].title).toBe('Zebra Story');
+    expect(result[result.length - 1].title).toBe('Alpha Article');
+  });
+
+  it('unknown sort value returns all articles unchanged in length', () => {
+    expect(sortNews(DATED, 'unknown')).toHaveLength(DATED.length);
+  });
+
+  it('does not mutate the original array', () => {
+    const original = DATED.slice();
+    sortNews(DATED, 'date-asc');
+    expect(DATED[0].title).toBe(original[0].title);
+    expect(DATED[1].title).toBe(original[1].title);
+    expect(DATED[2].title).toBe(original[2].title);
+  });
+
+  it('returns all articles (preserves length) for every sort mode', () => {
+    ['date-desc', 'date-asc', 'alpha-asc', 'alpha-desc'].forEach(mode => {
+      expect(sortNews(DATED, mode)).toHaveLength(DATED.length);
+    });
   });
 });

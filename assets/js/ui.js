@@ -100,6 +100,7 @@ export function searchNews(articles, query) {
     const haystack = [
       a.title   ?? '',
       a.excerpt ?? '',
+      a.body    ?? '',
       (a.tags   ?? []).join(' '),
     ].join(' ').toLowerCase();
     return haystack.includes(q);

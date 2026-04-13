@@ -108,12 +108,12 @@ describe('matchesFilter', () => {
 });
 
 // ── searchNews ────────────────────────────────────────────────
-const makeArticle = (title, excerpt, tags = []) => ({ title, excerpt, tags, category: 'Test' });
+const makeArticle = (title, excerpt, tags = [], body = '') => ({ title, excerpt, tags, body, category: 'Test' });
 
 const ARTICLES = [
-  makeArticle('Bokkos Attack 2026', 'Farmers killed in overnight raid', ['Security', 'Bokkos']),
-  makeArticle('Campaign Launch', 'AVM Masiyer officially declares', ['Campaign', 'APC']),
-  makeArticle('Youth Exodus', 'Young people leaving Mangu for Lagos', ['Youth', 'Mangu']),
+  makeArticle('Bokkos Attack 2026', 'Farmers killed in overnight raid', ['Security', 'Bokkos'], 'Gunmen stormed the community at midnight and opened fire on sleeping residents.'),
+  makeArticle('Campaign Launch', 'AVM Masiyer officially declares', ['Campaign', 'APC'], 'The declaration ceremony took place in Kopyal before hundreds of supporters.'),
+  makeArticle('Youth Exodus', 'Young people leaving Mangu for Lagos', ['Youth', 'Mangu'], 'Unemployment and insecurity are the primary drivers of the demographic shift.'),
 ];
 
 describe('searchNews', () => {
@@ -159,5 +159,24 @@ describe('searchNews', () => {
   it('null/undefined query returns all articles', () => {
     expect(searchNews(ARTICLES, null)).toHaveLength(3);
     expect(searchNews(ARTICLES, undefined)).toHaveLength(3);
+  });
+
+  it('matches on body text (full article content)', () => {
+    // "Kopyal" only appears in the body of the Campaign Launch article
+    const results = searchNews(ARTICLES, 'Kopyal');
+    expect(results).toHaveLength(1);
+    expect(results[0].title).toBe('Campaign Launch');
+  });
+
+  it('matches a word found only in body, not in title/excerpt/tags', () => {
+    // "demographic" only appears in the Youth Exodus body
+    const results = searchNews(ARTICLES, 'demographic');
+    expect(results).toHaveLength(1);
+    expect(results[0].title).toBe('Youth Exodus');
+  });
+
+  it('body search is case-insensitive', () => {
+    expect(searchNews(ARTICLES, 'MIDNIGHT')).toHaveLength(1);
+    expect(searchNews(ARTICLES, 'midnight')).toHaveLength(1);
   });
 });

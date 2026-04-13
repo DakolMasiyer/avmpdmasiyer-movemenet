@@ -43,7 +43,7 @@ async function loadNewsPage() {
   });
 
   if (searchInput) {
-    searchInput.addEventListener('input', debounce(apply, 200));
+    searchInput.addEventListener('input', apply);
   }
 
   const hash = window.location.hash.replace('#', '');

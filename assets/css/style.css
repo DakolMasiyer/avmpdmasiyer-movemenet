@@ -946,8 +946,13 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
 .footer-tagline {
   font-family: 'Cormorant Garamond', serif;
   font-size: 13px;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: rgba(245,196,28,0.55);
+}
+.footer-tagline em {
   font-style: italic;
-  color: rgba(245,196,28,0.45);
+  color: rgba(245,196,28,0.85);
 }
 
 /* ── UTILITIES ── */

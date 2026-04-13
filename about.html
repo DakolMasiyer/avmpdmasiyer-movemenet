@@ -14,7 +14,7 @@
   <meta property="og:type" content="profile">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="About AVM Paul D. Masiyer — PMM 2027 Mangu/Bokkos">
-  <meta name="twitter:description" content="Biography of Air Vice Marshal Paul D. Masiyer (Rtd.) — candidate for House of Representatives, Mangu/Bokkos, Plateau State 2027.">&gt;
+  <meta name="twitter:description" content="Biography of Air Vice Marshal Paul D. Masiyer (Rtd.) — candidate for House of Representatives, Mangu/Bokkos, Plateau State 2027.">
   <link rel="icon" type="image/svg+xml" href="assets/img/logo/pmm-favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,10 @@
     .profile-meta { display:flex; flex-direction:column; gap:10px; }
     .profile-meta-item { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:rgba(255,255,255,0.65); }
     .profile-meta-item span:first-child { flex-shrink:0; font-size:16px; }
-    @media(max-width:768px){ .about-grid{grid-template-columns:1fr!important;} }
+    @media(max-width:768px){
+      .about-grid   { grid-template-columns:1fr !important; gap:28px !important; }
+      .profile-card { padding:22px; }
+    }
   </style>
 </head>
 <body>

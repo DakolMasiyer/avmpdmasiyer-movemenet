@@ -46,20 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
     'url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTcviYwY.woff2)'
   );
 
-  Promise.all([fontPrimary.load(), fontSecondary.load()])
-    .then(fonts => {
-      fonts.forEach(f => document.fonts.add(f));
+  Promise.allSettled([fontPrimary.load(), fontSecondary.load()])
+    .then(results => {
+      results.forEach(r => { if (r.status === 'fulfilled') document.fonts.add(r.value); });
       fontsReady = true;
-      if (baseImg.complete && baseImg.naturalWidth > 0) drawPoster();
-    })
-    .catch(() => {
-      fontsReady = true;
-      if (baseImg.complete && baseImg.naturalWidth > 0) drawPoster();
+      drawPoster();
     });
 
   // ===== BASE IMAGE =====
   const baseImg = new Image();
-  baseImg.crossOrigin = 'anonymous';
   baseImg.src = 'assets/img/poster/campaign-poster.jpg';
   baseImg.onload  = () => { if (fontsReady) drawPoster(); };
   baseImg.onerror = () => drawFallback();

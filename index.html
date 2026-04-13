@@ -16,7 +16,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://pmm2027.netlify.app/">
   <meta property="og:title" content="AVM Paul Masiyer — A New Dawn for Mangu/Bokkos | PMM 2027">
-  <meta property="og:description" content="Air Vice Marshal Paul D. Masiyer (Rtd.) is running for House of Representatives, Mangu/Bokkos Federal Constituency, Plateau State — 2027. Service. Sacrifice. Commitment.">
+  <meta property="og:description" content="Air Vice Marshal Paul D. Masiyer (Rtd.) is running for House of Representatives, Mangu/Bokkos Federal Constituency, Plateau State — 2027. Service is the promise we make, and unity is the strength that fulfills it.">
   <meta property="og:image" content="https://pmm2027.netlify.app/assets/img/poster/campaign-poster.jpg">
   <meta property="og:image:width" content="1179">
   <meta property="og:image:height" content="1656">
@@ -62,6 +62,45 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* ── About strip — mobile layout ── */
+    .about-strip-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "heading image" "body image";
+      gap: 48px 72px;
+      align-items: start;
+    }
+    .about-strip-heading { grid-area: heading; }
+    .about-strip-image   { grid-area: image; }
+    .about-strip-body    { grid-area: body; }
+    @media (max-width: 768px) {
+      .about-strip-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas: "heading" "image" "body";
+        gap: 24px;
+      }
+    }
+    /* ── Poster section — mobile layout ── */
+    .poster-section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "img text";
+      gap: 64px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .poster-section-img  { grid-area: img; }
+    .poster-section-text { grid-area: text; }
+    @media (max-width: 768px) {
+      .poster-section-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas: "text" "img";
+        gap: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -117,7 +156,7 @@
         </h1>
 
         <div class="hero-tagline" data-t="hero-tagline">
-          Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos
+          Service is the promise we make, and unity is the strength that fulfills it
         </div>
 
         <p class="hero-desc" data-t="hero-desc">
@@ -161,18 +200,15 @@
   <!-- ── ABOUT STRIP ── -->
   <section class="section" style="background:white;">
     <div class="container">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
-        <div class="aos">
+      <div class="about-strip-grid">
+
+        <div class="about-strip-heading aos">
           <div class="label">About the Candidate</div>
           <div class="divider"></div>
           <h2 style="color:var(--green);">A Soldier Returning to Serve</h2>
-          <p style="margin-top:14px;">Air Vice Marshal Paul D. Masiyer (Rtd.) is a distinguished son of Mangu/Bokkos Federal Constituency, Plateau State. Over a career spanning more than three decades in the Nigerian Air Force, he rose to the rank of Air Vice Marshal — the peak of commissioned service.</p>
-          <p>His most senior appointments — Chief of Logistics at HQ NAF and Commandant of the Military Training Centre — required the kind of precision, discipline, and integrity that he now brings to this campaign.</p>
-          <p>Retirement from the military did not mean retirement from service. It meant finding a new way to serve — starting with the people of Mangu/Bokkos.</p>
-          <a href="about.html" class="btn btn-ghost" style="margin-top:24px;">Read His Full Story →</a>
         </div>
 
-        <div class="aos aos-delay-2">
+        <div class="about-strip-image aos aos-delay-2">
           <!-- portrait-kaftan.jpg: warm amber kaftan, approachable — matches the human
                biographical tone of this section. Deliberate contrast with the APC
                campaign portrait in the hero and the suit portrait on the About page. -->
@@ -183,6 +219,14 @@
                  style="width:100%;height:auto;display:block;object-fit:cover;">
           </div>
         </div>
+
+        <div class="about-strip-body">
+          <p style="margin-top:0;">Air Vice Marshal Paul D. Masiyer (Rtd.) is a distinguished son of Mangu/Bokkos Federal Constituency, Plateau State. Over a career spanning more than three decades in the Nigerian Air Force, he rose to the rank of Air Vice Marshal — the peak of commissioned service.</p>
+          <p>His most senior appointments — Chief of Logistics at HQ NAF and Commandant of the Military Training Centre — required the kind of precision, discipline, and integrity that he now brings to this campaign.</p>
+          <p>Retirement from the military did not mean retirement from service. It meant finding a new way to serve — starting with the people of Mangu/Bokkos.</p>
+          <a href="about.html" class="btn btn-ghost" style="margin-top:24px;">Read His Full Story →</a>
+        </div>
+
       </div>
     </div>
   </section>
@@ -248,8 +292,9 @@
   <!-- ── CAMPAIGN POSTER DOWNLOAD ── -->
   <section class="section-sm" style="background:var(--green);">
     <div class="container">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1;">
-        <div class="aos">
+      <div class="poster-section-grid">
+
+        <div class="poster-section-img aos">
           <!--
             Official campaign poster — displayed as featured asset.
             Download available for supporters to save and share directly.
@@ -260,7 +305,8 @@
                  loading="lazy">
           </div>
         </div>
-        <div class="aos aos-delay-2">
+
+        <div class="poster-section-text aos aos-delay-2">
           <div class="label" style="color:var(--gold);margin-bottom:16px;">Official Campaign Poster</div>
           <h2 style="color:white;margin-bottom:16px;">Service Is Not Just a Word</h2>
           <p style="color:rgba(255,255,255,0.65);">For AVM Paul D. Masiyer, service is a 35-year record. Every day in the Nigerian Air Force — from junior officer to Air Vice Marshal — was a day in service of Nigeria. Now he brings that same spirit home to Mangu/Bokkos.</p>
@@ -279,6 +325,7 @@
             Official poster: download &amp; share as-is. My Poster: personalise with your name and ward.
           </p>
         </div>
+
       </div>
     </div>
   </section>

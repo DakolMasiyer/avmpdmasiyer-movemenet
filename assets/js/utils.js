@@ -22,7 +22,7 @@ export const translations = {
   // Hero
   'hero-label':      { en: 'House of Reps · Mangu/Bokkos · 2027', mw: 'Majalisar Wakilai · Mangu/Bokkos · 2027', ch: 'Majalisar Wakilai · Mangu/Bokkos · 2027' },
   'hero-name':       { en: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>', mw: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>', ch: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>' },
-  'hero-tagline':    { en: 'Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos', mw: 'Aiki. Sadaukarwa. Alkawari. — Sabuwar Alfijir ga Mangu/Bokkos', ch: 'Hidima. Sadaukarwa. Wa\'adi. — Sabuwar Alfijir ga Mangu/Bokkos' },
+  'hero-tagline':    { en: 'Service is the promise we make, and unity is the strength that fulfills it', mw: 'Aiki. Sadaukarwa. Alkawari. — Sabuwar Alfijir ga Mangu/Bokkos', ch: 'Hidima. Sadaukarwa. Wa\'adi. — Sabuwar Alfijir ga Mangu/Bokkos' },
   'hero-desc':       { en: '35 years defending Nigeria. Now returning home to defend Mangu/Bokkos at the National Assembly.', mw: 'Shekaru 35 kare Najeriya. Yanzu ya dawo gida don kare Mangu/Bokkos a Majalisar Kasa.', ch: 'Shekaru 35 kare Najeriya. Yanzu ya dawo don kare Mangu/Bokkos a Majalisar Kasa.' },
   'hero-cta-join':   { en: 'Join the Movement', mw: 'Wur Yar Ɓangas',  ch: 'Shiga Kungiyar' },
   'hero-cta-vision': { en: 'Our Vision',         mw: 'Yar Ɓangas Mu',   ch: 'Manufarmu' },

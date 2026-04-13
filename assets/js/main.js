@@ -125,8 +125,8 @@ function initShareButtons() {
     if (!btn) return;
     const platform = btn.getAttribute('data-share');
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent('Join AVM Paul Masiyer (Rtd.) — A New Dawn for Mangu/Bokkos. House of Representatives 2027 #PMM2027 #ManguBokkos');
-    const waMsg = encodeURIComponent('Join the AVM Paul Masiyer Movement! 🇳🇬\n\n"Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos"\n\nAVM Paul D. Masiyer (Rtd.) — House of Representatives, Mangu/Bokkos 2027\n\nJoin us: ' + window.location.origin + '\n\n#PMM2027 #ManguBokkos #APC2027');
+    const text = encodeURIComponent('Join AVM Paul Masiyer (Rtd.) — Service is the promise we make, and unity is the strength that fulfills it. House of Representatives 2027 #PMM2027 #ManguBokkos');
+    const waMsg = encodeURIComponent('Join the AVM Paul Masiyer Movement! 🇳🇬\n\n"Service is the promise we make, and unity is the strength that fulfills it"\n\nAVM Paul D. Masiyer (Rtd.) — House of Representatives, Mangu/Bokkos 2027\n\nJoin us: ' + window.location.origin + '\n\n#PMM2027 #ManguBokkos #APC2027');
 
     const urls = {
       whatsapp: `https://wa.me/?text=${waMsg}`,

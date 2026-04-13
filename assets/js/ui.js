@@ -24,8 +24,8 @@ async function loadNewsPage() {
   try {
     const res = await fetch('data/news.json');
     allNews = await res.json();
-    renderNews(allNews, grid);
     updateFilterCounts(allNews);
+    applyFiltersAndSearch(allNews, grid);
   } catch {
     grid.innerHTML = '<p style="color:var(--ink-muted);padding:32px 0;">Could not load news. Please refresh.</p>';
     return;

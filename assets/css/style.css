@@ -387,6 +387,7 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.7);
 }
 
 .apc-logo-circle img {

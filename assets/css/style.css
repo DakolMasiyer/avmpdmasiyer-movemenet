@@ -407,6 +407,11 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
 .hero h1 { color: white; margin-bottom: 6px; line-height: 1.05; }
 .hero h1 em { font-style: italic; color: var(--gold); }
 
+/* Shrinks to the h1's natural content width; tagline aligns to same right edge */
+.hero-name-block {
+  display: table;
+}
+
 .hero-tagline {
   font-family: 'DM Mono', monospace;
   font-size: 11px;
@@ -416,7 +421,7 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
   margin-bottom: 20px;
   margin-top: 16px;
   display: block;
-  max-width: 400px;
+  width: 100%;
   line-height: 1.9;
 }
 

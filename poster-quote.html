@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy Quote Poster — PMM 2027 | AVM Paul Masiyer Movement</title>
+  <meta name="description" content="Official PMM 2027 peace and security policy quote poster. Download and share.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/logo/pmm-favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+  <style>
+    /* ── PAGE WRAPPER ── */
+    .poster-page {
+      background: var(--cream);
+      min-height: 100vh;
+      padding: 40px 24px 60px;
+    }
+    .poster-page-header {
+      max-width: 1120px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .poster-page-header nav {
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+    .poster-page-header nav a { color: var(--green); font-weight: 500; }
+    .poster-page-header nav .sep { margin: 0 6px; opacity: 0.5; }
+    .dl-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .dl-note {
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── SCALE WRAPPER ── */
+    .poster-scaler {
+      max-width: 1120px;
+      margin: 0 auto;
+      border: 2px solid var(--border-gold);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      background: #130928;
+    }
+
+    /* ── POSTER FRAME (1080 × 1519) ── */
+    #quote-poster {
+      width: 1080px;
+      height: 1519px;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 72% 18%, #5a1f9a 0%, #2a1154 52%, #130928 100%);
+      font-family: 'Outfit', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── DIAGONAL ACCENT LINES (top-right) ── */
+    #quote-poster::before,
+    #quote-poster::after {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -60px;
+      width: 3px;
+      height: 420px;
+      background: rgba(255, 255, 255, 0.12);
+      transform-origin: top center;
+      transform: rotate(18deg);
+    }
+    #quote-poster::after {
+      right: -20px;
+      width: 1px;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.07);
+      transform: rotate(18deg);
+    }
+
+    /* Extra diagonal accents via SVG overlay */
+    .diag-accents {
+      position: absolute;
+      top: 0; right: 0;
+      width: 340px;
+      height: 380px;
+      pointer-events: none;
+    }
+
+    /* ── GOLD RULE ── */
+    .gold-rule {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, #F5C41C 20%, #F5C41C 80%, transparent 100%);
+      opacity: 0.55;
+    }
+
+    /* ── HEADER BAND ── */
+    .poster-header {
+      position: relative;
+      z-index: 2;
+      padding: 38px 52px 28px;
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+    .poster-header-text {
+      flex: 1;
+    }
+    .poster-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: #F5C41C;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+    .poster-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .poster-constituency {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245, 196, 28, 0.75);
+    }
+
+    /* ── APC SHIELD SVG WRAPPER ── */
+    .apc-shield-wrap {
+      flex-shrink: 0;
+      width: 110px;
+      height: 110px;
+    }
+
+    /* ── BODY SECTION ── */
+    .poster-body {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex: 1;
+      padding: 0 52px 0 52px;
+      gap: 36px;
+      align-items: flex-start;
+      height: 1180px;
+      overflow: hidden;
+    }
+
+    /* ── QUOTE COLUMN (left) ── */
+    .poster-quote-col {
+      flex: 0 0 590px;
+      padding-top: 28px;
+    }
+    .open-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 130px;
+      font-weight: 700;
+      color: #F5C41C;
+      line-height: 0.6;
+      opacity: 0.85;
+      display: block;
+      margin-bottom: 10px;
+      margin-left: -8px;
+    }
+    .poster-quote-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.91);
+      line-height: 1.82;
+      margin-bottom: 26px;
+    }
+    .poster-quote-text strong {
+      color: #F5C41C;
+      font-weight: 600;
+    }
+    .poster-quote-text + .poster-quote-text {
+      font-size: 19.5px;
+    }
+    .poster-attribution {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    .attr-line {
+      width: 36px;
+      height: 2px;
+      background: #F5C41C;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+    .attr-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* ── PORTRAIT COLUMN (right) ── */
+    .poster-portrait-col {
+      flex: 1;
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: visible;
+    }
+    .portrait-mask {
+      position: relative;
+      width: 100%;
+      height: 1060px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .portrait-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      mix-blend-mode: screen;
+      /* Radial fade via mask-image */
+      -webkit-mask-image:
+        radial-gradient(ellipse 90% 100% at 50% 50%, black 45%, transparent 100%);
+      mask-image:
+        radial-gradient(ellipse 90% 100% at 50% 50%, black 45%, transparent 100%);
+    }
+    /* Subtle purple glow behind portrait */
+    .portrait-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(90, 31, 154, 0.45) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── FOOTER BAND ── */
+    .poster-footer {
+      position: relative;
+      z-index: 2;
+      padding: 22px 52px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .footer-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: rgba(255, 255, 255, 0.45);
+      text-transform: uppercase;
+    }
+    .footer-hashtag {
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: #F5C41C;
+      opacity: 0.85;
+    }
+    .footer-pmm-logo {
+      height: 44px;
+      width: auto;
+      opacity: 0.85;
+      filter: brightness(0) invert(1);
+    }
+    .footer-divider {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.2);
+    }
+    .footer-right {
+      text-align: right;
+    }
+    .footer-website {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.35);
+      text-transform: lowercase;
+    }
+
+    /* ── RESPONSIVE SCALE ── */
+    @media (max-width: 1140px) {
+      .poster-scaler {
+        overflow-x: auto;
+      }
+    }
+
+    /* ── DOWNLOAD LOADING STATE ── */
+    #dl-btn.loading {
+      opacity: 0.65;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div data-include="components/navbar.html"></div>
+
+  <div class="poster-page" style="padding-top: calc(var(--nav-h) + 32px);">
+
+    <div class="poster-page-header">
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a><span class="sep">›</span>
+        <a href="poster.html">Create My Poster</a><span class="sep">›</span>
+        <span class="current">Policy Quote Poster</span>
+      </nav>
+      <div class="dl-bar">
+        <span class="dl-note">1080 × 1519 px · JPG</span>
+        <button id="dl-btn" class="btn btn-primary">⬇ Download Poster</button>
+      </div>
+    </div>
+
+    <div class="poster-scaler">
+      <!-- ════════════════════════════════════════════════
+           POSTER FRAME — 1080 × 1519
+           ════════════════════════════════════════════════ -->
+      <div id="quote-poster">
+
+        <!-- Diagonal accent SVG overlay -->
+        <svg class="diag-accents" viewBox="0 0 340 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <line x1="310" y1="-40" x2="230" y2="420" stroke="white" stroke-width="1.5" stroke-opacity="0.13"/>
+          <line x1="340" y1="-40" x2="270" y2="380" stroke="white" stroke-width="0.8" stroke-opacity="0.07"/>
+          <line x1="280" y1="-40" x2="185" y2="380" stroke="white" stroke-width="0.5" stroke-opacity="0.05"/>
+        </svg>
+
+        <!-- ── HEADER ── -->
+        <div class="poster-header">
+          <!-- APC Logo SVG -->
+          <div class="apc-shield-wrap">
+            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="APC Logo">
+              <!-- Outer circle ring -->
+              <circle cx="60" cy="60" r="57" fill="#1a3f8f" stroke="white" stroke-width="1.5"/>
+              <circle cx="60" cy="60" r="49" fill="#0d1a10"/>
+              <!-- Arc text paths -->
+              <defs>
+                <path id="top-arc" d="M 13,60 A 47,47 0 1,1 107,60"/>
+                <path id="bottom-arc" d="M 16,68 A 44,44 0 0,0 104,68"/>
+                <!-- Shield clip -->
+                <clipPath id="shield-clip">
+                  <path d="M60,14 L90,22 L96,58 Q96,84 60,104 Q24,84 24,58 L30,22 Z"/>
+                </clipPath>
+              </defs>
+              <!-- Top arc text -->
+              <text font-family="Outfit,sans-serif" font-size="8.2" font-weight="600" fill="white" letter-spacing="0.8">
+                <textPath href="#top-arc" startOffset="12%">ALL PROGRESSIVES CONGRESS</textPath>
+              </text>
+              <!-- Bottom arc text -->
+              <text font-family="Outfit,sans-serif" font-size="7.5" font-weight="500" fill="rgba(255,255,255,0.8)" letter-spacing="0.5">
+                <textPath href="#bottom-arc" startOffset="8%">JUSTICE · PEACE AND UNITY</textPath>
+              </text>
+
+              <!-- Shield body — upper two-thirds (green | white | blue stripes) -->
+              <g clip-path="url(#shield-clip)">
+                <!-- Background green -->
+                <rect x="24" y="14" width="72" height="90" fill="#195727"/>
+                <!-- White centre bar -->
+                <rect x="43.2" y="14" width="33.6" height="57" fill="white"/>
+                <!-- Blue right bar -->
+                <rect x="76.8" y="14" width="19.2" height="57" fill="#1a3f8f"/>
+
+                <!-- Lower shield: red base -->
+                <rect x="24" y="70" width="72" height="34" fill="#cc2222"/>
+
+                <!-- Broom on white bar (simple stylised shape) -->
+                <g fill="#195727" opacity="0.92">
+                  <!-- Handle -->
+                  <rect x="58.5" y="20" width="3" height="30" rx="1"/>
+                  <!-- Bristles -->
+                  <path d="M52,50 Q60,46 68,50 L65,54 Q60,51 55,54 Z"/>
+                  <path d="M51,53 Q60,49 69,53 L66,58 Q60,54 54,58 Z"/>
+                </g>
+
+                <!-- "APC" text in red zone -->
+                <text x="60" y="91" font-family="Outfit,sans-serif" font-size="13" font-weight="700"
+                      fill="white" text-anchor="middle" letter-spacing="1.5">APC</text>
+              </g>
+
+              <!-- Shield outline -->
+              <path d="M60,14 L90,22 L96,58 Q96,84 60,104 Q24,84 24,58 L30,22 Z"
+                    fill="none" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- Candidate info -->
+          <div class="poster-header-text">
+            <div class="poster-label">APC — Mangu/Bokkos Federal Constituency</div>
+            <div class="poster-name">AVM Paul D. Masiyer (Rtd.)</div>
+            <div class="poster-constituency">House of Representatives · Mangu/Bokkos 2027</div>
+          </div>
+        </div>
+
+        <!-- Gold rule below header -->
+        <div class="gold-rule"></div>
+
+        <!-- ── BODY ── -->
+        <div class="poster-body">
+
+          <!-- Quote column -->
+          <div class="poster-quote-col">
+            <span class="open-quote">&#8220;</span>
+
+            <p class="poster-quote-text">
+              PEACE AND SECURITY IN MANGU/BOKKOS ARE MY TOP PRIORITY. IF ELECTED, I WILL WORK WITH RELEVANT STAKEHOLDERS TO
+              <strong>CONFRONT TERRORISM, STRENGTHEN LOCAL SECURITY,</strong>
+              AND ENSURE SWIFT RESPONSE TO THREATS, WHILE SUPPORTING OUR SECURITY PERSONNEL.
+            </p>
+
+            <p class="poster-quote-text">
+              I WILL ALSO ADDRESS THE <strong>ROOT CAUSES</strong> THROUGH
+              <strong>YOUTH EMPOWERMENT AND JOB CREATION;</strong>
+              BUILDING A SAFER, MORE STABLE FUTURE FOR ALL.
+            </p>
+
+            <div class="poster-attribution">
+              <span class="attr-line"></span>
+              <span class="attr-text">AVM Paul Masiyer RTD</span>
+            </div>
+          </div>
+
+          <!-- Portrait column -->
+          <div class="poster-portrait-col">
+            <div class="portrait-glow"></div>
+            <div class="portrait-mask">
+              <img
+                class="portrait-img"
+                src="assets/img/portraits/portrait-kaftan-formal-2026.jpg"
+                alt="AVM Paul D. Masiyer"
+                crossorigin="anonymous"
+              >
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Gold rule above footer -->
+        <div class="gold-rule"></div>
+
+        <!-- ── FOOTER ── -->
+        <div class="poster-footer">
+          <div class="footer-left">
+            <!-- APC micro-logo repeat (small) -->
+            <svg width="34" height="34" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="60" cy="60" r="57" fill="#1a3f8f" stroke="white" stroke-width="2"/>
+              <circle cx="60" cy="60" r="49" fill="#0d1a10"/>
+              <defs>
+                <clipPath id="shield-clip-sm">
+                  <path d="M60,14 L90,22 L96,58 Q96,84 60,104 Q24,84 24,58 L30,22 Z"/>
+                </clipPath>
+              </defs>
+              <g clip-path="url(#shield-clip-sm)">
+                <rect x="24" y="14" width="72" height="90" fill="#195727"/>
+                <rect x="43.2" y="14" width="33.6" height="57" fill="white"/>
+                <rect x="76.8" y="14" width="19.2" height="57" fill="#1a3f8f"/>
+                <rect x="24" y="70" width="72" height="34" fill="#cc2222"/>
+                <text x="60" y="91" font-family="Outfit,sans-serif" font-size="13" font-weight="700"
+                      fill="white" text-anchor="middle" letter-spacing="1">APC</text>
+              </g>
+              <path d="M60,14 L90,22 L96,58 Q96,84 60,104 Q24,84 24,58 L30,22 Z"
+                    fill="none" stroke="white" stroke-width="1.5"/>
+            </svg>
+
+            <div class="footer-divider"></div>
+            <span class="footer-hashtag">#PMM2027</span>
+            <div class="footer-divider"></div>
+            <span class="footer-tag">Peace · Security · Progress</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;">
+            <img
+              class="footer-pmm-logo"
+              src="assets/img/logo/pmm-logo.png"
+              alt="PMM 2027"
+              crossorigin="anonymous"
+            >
+            <div class="footer-right">
+              <div class="footer-website">pmm2027.netlify.app</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /#quote-poster -->
+    </div><!-- /.poster-scaler -->
+
+    <p style="text-align:center;font-size:11.5px;color:var(--ink-muted);margin-top:14px;">
+      1080 × 1519 px — optimised for WhatsApp and community sharing
+    </p>
+
+  </div><!-- /.poster-page -->
+
+  <div data-include="components/footer.html"></div>
+  <script src="assets/js/main.js"></script>
+  <script>
+    document.getElementById('dl-btn').addEventListener('click', function () {
+      const btn = this;
+      btn.textContent = '⏳ Generating…';
+      btn.classList.add('loading');
+
+      const poster = document.getElementById('quote-poster');
+      html2canvas(poster, {
+        scale: 1,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: null,
+        width: 1080,
+        height: 1519,
+        logging: false
+      }).then(function (canvas) {
+        canvas.toBlob(function (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'PMM2027-Quote-Poster.jpg';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          btn.textContent = '✓ Downloaded!';
+          btn.classList.remove('loading');
+          setTimeout(() => { btn.textContent = '⬇ Download Poster'; }, 2500);
+        }, 'image/jpeg', 0.93);
+      }).catch(function () {
+        btn.textContent = '⬇ Download Poster';
+        btn.classList.remove('loading');
+      });
+    });
+  </script>
+</body>
+</html>

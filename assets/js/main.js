@@ -255,13 +255,9 @@ async function loadNewsPreview() {
 }
 
 // ── VIMEO FACADE ─────────────────────────────────────────────
-// Defers iframe creation until user clicks — keeps page load
-// free of Vimeo's ~300KB player JS until it's actually needed.
-// No autoplay=1: iOS Safari forcibly mutes programmatic autoplay
-// in iframes even with a user gesture. Letting the user tap the
-// native Vimeo play button directly is the only reliable way to
-// get audio on iOS/Safari. texttrack=en enables captions if a
-// caption track has been added to the video on Vimeo.
+// Facade keeps page load free of Vimeo JS. On click, the SDK is
+// loaded dynamically, then used to explicitly unmute and set full
+// volume — the only reliable way to get audio on iOS/Safari.
 document.querySelectorAll('.video-facade').forEach(el => {
   el.addEventListener('click', () => {
     const id = el.dataset.vimid;
@@ -272,5 +268,22 @@ document.querySelectorAll('.video-facade').forEach(el => {
     el.innerHTML = '';
     el.appendChild(iframe);
     el.style.cursor = 'default';
+
+    // Load Vimeo SDK once, then unmute + max volume + play
+    const load = () => {
+      const player = new Vimeo.Player(iframe);
+      player.setMuted(false).catch(() => {});
+      player.setVolume(1).catch(() => {});
+      player.play().catch(() => {});
+    };
+
+    if (window.Vimeo) {
+      load();
+    } else {
+      const s = document.createElement('script');
+      s.src = 'https://player.vimeo.com/api/player.js';
+      s.onload = load;
+      document.head.appendChild(s);
+    }
   }, { once: true });
 });

@@ -257,11 +257,16 @@ async function loadNewsPreview() {
 // ── VIMEO FACADE ─────────────────────────────────────────────
 // Defers iframe creation until user clicks — keeps page load
 // free of Vimeo's ~300KB player JS until it's actually needed.
+// No autoplay=1: iOS Safari forcibly mutes programmatic autoplay
+// in iframes even with a user gesture. Letting the user tap the
+// native Vimeo play button directly is the only reliable way to
+// get audio on iOS/Safari. texttrack=en enables captions if a
+// caption track has been added to the video on Vimeo.
 document.querySelectorAll('.video-facade').forEach(el => {
   el.addEventListener('click', () => {
     const id = el.dataset.vimid;
     const iframe = document.createElement('iframe');
-    iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0#t=3s`;
+    iframe.src = `https://player.vimeo.com/video/${id}?title=0&byline=0&portrait=0&texttrack=en#t=3s`;
     iframe.allow = 'autoplay; fullscreen; picture-in-picture';
     iframe.setAttribute('allowfullscreen', '');
     el.innerHTML = '';

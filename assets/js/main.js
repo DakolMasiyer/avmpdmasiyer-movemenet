@@ -262,7 +262,7 @@ document.querySelectorAll('.video-facade').forEach(el => {
   el.addEventListener('click', () => {
     const id = el.dataset.vimid;
     const iframe = document.createElement('iframe');
-    iframe.src = `https://player.vimeo.com/video/${id}?title=0&byline=0&portrait=0&texttrack=en#t=3s`;
+    iframe.src = `https://player.vimeo.com/video/${id}?title=0&byline=0&portrait=0&texttrack=en#t=5s`;
     iframe.allow = 'autoplay; fullscreen; picture-in-picture';
     iframe.setAttribute('allowfullscreen', '');
     el.innerHTML = '';

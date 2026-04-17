@@ -1217,9 +1217,36 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
 }
 
 /* Inside about-strip grid column, remove default margin */
-.about-strip-image .video-facade {
+.about-strip-image .video-block {
   margin: 0;
   box-shadow: var(--shadow-lg);
+}
+
+.video-block {
+  margin: 36px 0;
+}
+
+.video-block .video-facade {
+  margin: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.video-caption {
+  background: var(--ink);
+  padding: 14px 20px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.video-caption .label {
+  color: var(--gold);
+  margin-bottom: 3px;
+  display: block;
+}
+
+.video-caption p {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  margin: 0;
 }
 
 /* About strip teaser link */

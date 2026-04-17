@@ -1216,6 +1216,12 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
   border: none;
 }
 
+/* Inside about-strip grid column, remove default margin */
+.about-strip-image .video-facade {
+  margin: 0;
+  box-shadow: var(--shadow-lg);
+}
+
 /* About strip teaser link */
 .video-teaser-link {
   display: inline-flex;

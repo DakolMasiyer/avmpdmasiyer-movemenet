@@ -1131,3 +1131,125 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
     margin-top: -10px;
   }
 }
+
+
+/* ── VIDEO FACADE (Vimeo lite embed) ── */
+.video-facade {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--ink);
+  cursor: pointer;
+  margin: 36px 0;
+}
+
+.video-facade img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.video-facade:hover img {
+  transform: scale(1.02);
+  filter: brightness(0.75);
+}
+
+.video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(13, 26, 16, 0.72);
+  border: 2px solid rgba(245, 196, 28, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.video-facade:hover .video-play-btn {
+  background: var(--green);
+  border-color: var(--gold);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-play-btn svg {
+  margin-left: 4px; /* optical centering of play triangle */
+}
+
+.video-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 24px;
+  background: linear-gradient(to top, rgba(13,26,16,0.88) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.video-label .label {
+  color: var(--gold);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.video-label p {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  margin: 0;
+}
+
+.video-facade iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* About strip teaser link */
+.video-teaser-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--green);
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 14px;
+  transition: var(--transition);
+}
+
+.video-teaser-link:hover {
+  color: var(--green-mid);
+}
+
+.video-teaser-link:hover .video-teaser-icon {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+
+.video-teaser-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: var(--green);
+  transition: var(--transition);
+  flex-shrink: 0;
+}

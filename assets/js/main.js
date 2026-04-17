@@ -253,3 +253,19 @@ async function loadNewsPreview() {
     console.warn('News load failed:', err);
   }
 }
+
+// ── VIMEO FACADE ─────────────────────────────────────────────
+// Defers iframe creation until user clicks — keeps page load
+// free of Vimeo's ~300KB player JS until it's actually needed.
+document.querySelectorAll('.video-facade').forEach(el => {
+  el.addEventListener('click', () => {
+    const id = el.dataset.vimid;
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0#t=3s`;
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+    iframe.setAttribute('allowfullscreen', '');
+    el.innerHTML = '';
+    el.appendChild(iframe);
+    el.style.cursor = 'default';
+  }, { once: true });
+});

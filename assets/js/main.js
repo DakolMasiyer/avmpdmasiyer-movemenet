@@ -2,6 +2,7 @@
    PMM 2027 — main.js
    Nav, AOS, language toggle (EN / Mwaghavul / Challa), share
    ============================================================ */
+import { formatDate, LANGS, LANG_LABELS, applyLanguage, MWAGHAVUL_POOL, shuffleNames } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   loadComponents();
@@ -56,34 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
   initLanguageToggle();
   initShareButtons();
   setActiveNavLink();
+  randomizeTestimonials();
 
   if (document.getElementById('news-preview')) loadNewsPreview();
 
   // Form handler
   const form = document.getElementById('join-form');
   if (form) {
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const btn = form.querySelector('[type="submit"]');
-      btn.textContent = 'Submitting...';
-      btn.disabled = true;
-      try {
-        const res = await fetch('https://formspree.io/f/mkopqngy', {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        });
-        if (res.ok) {
-          form.style.display = 'none';
-          document.getElementById('form-success')?.classList.add('visible');
-        } else {
-          btn.textContent = 'Error — Try Again';
-          btn.disabled = false;
-        }
-      } catch {
-        btn.textContent = 'Error — Try Again';
-        btn.disabled = false;
-      }
+      submitJoinForm(form);
     });
   }
 });
@@ -102,7 +85,7 @@ async function loadComponents() {
 }
 
 // ── COUNTER ANIMATION ──────────────────────────────────────────
-function animateCounter(el) {
+export function animateCounter(el) {
   const target = parseInt(el.getAttribute('data-target'), 10);
   const suffix = el.getAttribute('data-suffix') || '';
   const duration = 1800;
@@ -116,44 +99,6 @@ function animateCounter(el) {
 }
 
 // ── LANGUAGE TOGGLE — EN / Mwaghavul (Mangu) / Challa (Bokkos) ──
-const translations = {
-  // Navigation
-  'nav-home':       { en: 'Home',          mw: 'Dang',         ch: 'Gida' },
-  'nav-about':      { en: 'About',         mw: 'Fatak',        ch: 'Game Da Shi' },
-  'nav-vision':     { en: 'Vision',        mw: 'Yar Ɓangas',   ch: 'Manufa' },
-  'nav-community':  { en: 'Community',     mw: 'Folong',       ch: 'Al\'umma' },
-  'nav-news':       { en: 'News',          mw: 'Labarai',      ch: 'Labarai' },
-  'nav-poster':     { en: 'My Poster',     mw: 'Kaat Am',      ch: 'Tabbati Na' },
-  'nav-join':       { en: 'Join PMM',      mw: 'Wur PMM',      ch: 'Shiga PMM' },
-  // Hero
-  'hero-label':     { en: 'House of Reps · Mangu/Bokkos · 2027', mw: 'Majalisar Wakilai · Mangu/Bokkos · 2027', ch: 'Majalisar Wakilai · Mangu/Bokkos · 2027' },
-  'hero-name':      { en: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>', mw: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>', ch: 'Air Vice Marshal<br>Paul D.<br><em>Masiyer (Rtd.)</em>' },
-  'hero-tagline':   { en: 'Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos', mw: 'Aiki. Sadaukarwa. Alkawari. — Sabuwar Alfijir ga Mangu/Bokkos', ch: 'Hidima. Sadaukarwa. Wa\'adi. — Sabuwar Alfijir ga Mangu/Bokkos' },
-  'hero-desc':      { en: '35 years defending Nigeria. Now returning home to defend Mangu/Bokkos at the National Assembly.', mw: 'Shekaru 35 kare Najeriya. Yanzu ya dawo gida don kare Mangu/Bokkos a Majalisar Kasa.', ch: 'Shekaru 35 kare Najeriya. Yanzu ya dawo don kare Mangu/Bokkos a Majalisar Kasa.' },
-  'hero-cta-join':  { en: 'Join the Movement', mw: 'Wur Yar Ɓangas', ch: 'Shiga Kungiyar' },
-  'hero-cta-vision':{ en: 'Our Vision',         mw: 'Yar Ɓangas Mu', ch: 'Manufarmu' },
-  // Sections
-  'section-agenda': { en: 'Our 8-Pillar Agenda', mw: 'Shirye-shirye 8', ch: 'Shirye-shirye 8' },
-  'section-news':   { en: 'Latest News',          mw: 'Labarai Sabon',   ch: 'Sabbin Labarai' },
-  'section-join':   { en: 'Join the Movement',    mw: 'Wur Yar Ɓangas',  ch: 'Shiga Kungiyar' },
-  // Stats
-  'stat-years':     { en: 'Years of Service',  mw: 'Shekara Hidima', ch: 'Shekarun Hidima' },
-  'stat-wards':     { en: 'Wards Reached',     mw: 'Unguwoyi',       ch: 'Unguwanni' },
-  'stat-supporters':{ en: 'Supporters',        mw: 'Masu Goyon Baya', ch: 'Magoya Baya' },
-  'stat-pillars':   { en: 'Agenda Pillars',    mw: 'Shirye-shirye',   ch: 'Manufofi' },
-  // Form
-  'form-firstname': { en: 'First Name', mw: 'Sunan Farko',  ch: 'Sunan Farko' },
-  'form-lastname':  { en: 'Last Name',  mw: 'Sunan Iyali',  ch: 'Sunan Iyali' },
-  'form-phone':     { en: 'Phone',      mw: 'Wayar Hannu',  ch: 'Lambar Waya' },
-  'form-email':     { en: 'Email',      mw: 'Imel',         ch: 'Imel' },
-  'form-lga':       { en: 'LGA',        mw: 'Kananan Hukuma', ch: 'Kananan Hukuma' },
-  'form-ward':      { en: 'Your Ward',  mw: 'Unguwar Ka',   ch: 'Unguwar Ka' },
-  'cta-submit':     { en: 'Join the Movement', mw: 'Wur Yanzu', ch: 'Shiga Yanzu' },
-  'cta-read-more':  { en: 'Read More', mw: 'Karanta Kari',  ch: 'Karanta Ƙari' },
-};
-
-const LANGS = ['en', 'mw', 'ch'];
-const LANG_LABELS = { en: 'EN', mw: 'MW', ch: 'CH' };
 let currentLangIdx = 0;
 let currentLang = localStorage.getItem('pmm-lang') || 'en';
 currentLangIdx = LANGS.indexOf(currentLang);
@@ -173,16 +118,6 @@ function initLanguageToggle() {
   });
 }
 
-function applyLanguage(lang) {
-  document.querySelectorAll('[data-t]').forEach(el => {
-    const key = el.getAttribute('data-t');
-    const val = translations[key]?.[lang] ?? translations[key]?.['en'];
-    if (!val) return;
-    if (el.getAttribute('data-html') === 'true') el.innerHTML = val;
-    else el.textContent = val;
-  });
-}
-
 // ── SOCIAL SHARE ──────────────────────────────────────────────
 function initShareButtons() {
   document.addEventListener('click', (e) => {
@@ -190,8 +125,8 @@ function initShareButtons() {
     if (!btn) return;
     const platform = btn.getAttribute('data-share');
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent('Join AVM Paul Masiyer (Rtd.) — A New Dawn for Mangu/Bokkos. House of Representatives 2027 #PMM2027 #ManguBokkos');
-    const waMsg = encodeURIComponent('Join the AVM Paul Masiyer Movement! 🇳🇬\n\n"Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos"\n\nAVM Paul D. Masiyer (Rtd.) — House of Representatives, Mangu/Bokkos 2027\n\nJoin us: ' + window.location.origin + '\n\n#PMM2027 #ManguBokkos #APC2027');
+    const text = encodeURIComponent('Join AVM Paul Masiyer (Rtd.) — Service is the promise we make, and unity is the strength that fulfills it. House of Representatives 2027 #PMM2027 #ManguBokkos');
+    const waMsg = encodeURIComponent('Join the AVM Paul Masiyer Movement! 🇳🇬\n\n"Service is the promise we make, and unity is the strength that fulfills it"\n\nAVM Paul D. Masiyer (Rtd.) — House of Representatives, Mangu/Bokkos 2027\n\nJoin us: ' + window.location.origin + '\n\n#PMM2027 #ManguBokkos #APC2027');
 
     const urls = {
       whatsapp: `https://wa.me/?text=${waMsg}`,
@@ -213,13 +148,73 @@ function initShareButtons() {
 }
 
 // ── ACTIVE NAV LINK ───────────────────────────────────────────
-function setActiveNavLink() {
-  const path = window.location.pathname.split('/').pop() || 'index.html';
+/**
+ * Marks the nav link matching the current page as active.
+ * Handles all three URL forms Netlify may serve:
+ *   /news.html  →  news.html
+ *   /news       →  news.html  (pretty URL without trailing slash)
+ *   /news/      →  news.html  (pretty URL with trailing slash)
+ *   /           →  index.html
+ */
+export function setActiveNavLink() {
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  let seg = parts.pop() || 'index.html';
+  if (!seg.includes('.')) seg += '.html';
   document.querySelectorAll('.nav-links a, #mobile-nav a').forEach(a => {
     const href = a.getAttribute('href');
-    if (href && (href === path || (path === '' && href === 'index.html'))) {
-      a.classList.add('active');
+    if (href && href === seg) a.classList.add('active');
+  });
+}
+
+// ── FORM SUBMISSION ───────────────────────────────────────────
+/**
+ * Submits the join form to Formspree.
+ * Extracted as a named export so it can be unit-tested with a mocked fetch.
+ */
+export async function submitJoinForm(form) {
+  const btn = form.querySelector('[type="submit"]');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/mkopqngy', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('form-success')?.classList.add('visible');
+    } else {
+      btn.textContent = 'Error — Try Again';
+      btn.disabled = false;
     }
+  } catch {
+    btn.textContent = 'Error — Try Again';
+    btn.disabled = false;
+  }
+}
+
+// ── TESTIMONIAL NAME RANDOMISER ───────────────────────────────
+/**
+ * On each page session, picks a fresh shuffle of MWAGHAVUL_POOL names
+ * and assigns them to the testimonial cards (name, avatar initial, role).
+ * The quote text is authored content and stays fixed; only attribution rotates.
+ * Cards must carry a [data-testimonial="0..5"] attribute.
+ */
+export function randomizeTestimonials() {
+  const grid = document.getElementById('testimonials-grid');
+  if (!grid) return;
+  const cards = grid.querySelectorAll('[data-testimonial]');
+  if (!cards.length) return;
+  const pool = shuffleNames(MWAGHAVUL_POOL);
+  cards.forEach((card, i) => {
+    const person = pool[i % pool.length];
+    const avatarEl = card.querySelector('.testimonial-avatar');
+    const nameEl   = card.querySelector('.testimonial-name');
+    const roleEl   = card.querySelector('.testimonial-role');
+    if (avatarEl) avatarEl.textContent = person.initial;
+    if (nameEl)   nameEl.textContent   = person.name;
+    if (roleEl)   roleEl.textContent   = person.role;
   });
 }
 
@@ -259,7 +254,36 @@ async function loadNewsPreview() {
   }
 }
 
-// ── HELPERS ───────────────────────────────────────────────────
-function formatDate(d) {
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-}
+// ── VIMEO FACADE ─────────────────────────────────────────────
+// Facade keeps page load free of Vimeo JS. On click, the SDK is
+// loaded dynamically, then used to explicitly unmute and set full
+// volume — the only reliable way to get audio on iOS/Safari.
+document.querySelectorAll('.video-facade').forEach(el => {
+  el.addEventListener('click', () => {
+    const id = el.dataset.vimid;
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://player.vimeo.com/video/${id}?title=0&byline=0&portrait=0&texttrack=en#t=5s`;
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+    iframe.setAttribute('allowfullscreen', '');
+    el.innerHTML = '';
+    el.appendChild(iframe);
+    el.style.cursor = 'default';
+
+    // Load Vimeo SDK once, then unmute + max volume + play
+    const load = () => {
+      const player = new Vimeo.Player(iframe);
+      player.setMuted(false).catch(() => {});
+      player.setVolume(1).catch(() => {});
+      player.play().catch(() => {});
+    };
+
+    if (window.Vimeo) {
+      load();
+    } else {
+      const s = document.createElement('script');
+      s.src = 'https://player.vimeo.com/api/player.js';
+      s.onload = load;
+      document.head.appendChild(s);
+    }
+  }, { once: true });
+});

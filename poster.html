@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/img/logo/pmm-favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
   <style>
     .poster-layout{display:grid;grid-template-columns:400px 1fr;gap:44px;align-items:start;}
@@ -71,7 +72,7 @@
               <option>Diaspora Supporter</option>
             </select>
           </div>
-          <div class="ctrl-field"><label>Personal Message (Optional)</label><input type="text" id="poster-message" placeholder="A New Dawn for Mangu/Bokkos" maxlength="38"></div>
+          <div class="ctrl-field"><label>Personal Message (Optional)</label><input type="text" id="poster-message" placeholder="Unity. Service. 2027." maxlength="38"></div>
 
           <button class="btn btn-green" id="poster-generate" style="width:100%;justify-content:center;margin-bottom:10px;">🎨 Generate My Poster</button>
           <div style="display:flex;flex-direction:column;gap:9px;">
@@ -83,7 +84,7 @@
             <p>📋 Copy this caption to post with your poster:</p>
             <div class="caption-text" id="poster-caption">I SUPPORT AVM PAUL D. MASIYER (RTD.) FOR HOUSE OF REPRESENTATIVES, MANGU/BOKKOS 2027!
 
-"Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos"
+"Service is the promise we make, and unity is the strength that fulfills it"
 
 Join the movement:
 pmm2027.netlify.app
@@ -123,8 +124,8 @@ pmm2027.netlify.app
   </section>
 
   <div data-include="components/footer.html"></div>
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/poster.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/poster.js"></script>
   <script>
     document.getElementById('copy-caption')?.addEventListener('click', () => {
       navigator.clipboard.writeText(document.getElementById('poster-caption').textContent).then(() => {
@@ -142,7 +143,7 @@ pmm2027.netlify.app
       const lga  = document.getElementById('poster-lga')?.value;
       const loc  = [ward, lga].filter(Boolean).join(', ');
       document.getElementById('poster-caption').textContent =
-        `I SUPPORT AVM PAUL D. MASIYER (RTD.) FOR HOUSE OF REPRESENTATIVES, MANGU/BOKKOS 2027!\n\n${name}${loc ? ` — ${loc}` : ''}\n\n"Service. Sacrifice. Commitment. — A New Dawn for Mangu/Bokkos"\n\nJoin the movement:\npmm2027.netlify.app\n\n#PMM2027 #ManguBokkos #APC2027 #LeadershipWithIntegrity`;
+        `I SUPPORT AVM PAUL D. MASIYER (RTD.) FOR HOUSE OF REPRESENTATIVES, MANGU/BOKKOS 2027!\n\n${name}${loc ? ` — ${loc}` : ''}\n\n"Service is the promise we make, and unity is the strength that fulfills it"\n\nJoin the movement:\npmm2027.netlify.app\n\n#PMM2027 #ManguBokkos #APC2027 #LeadershipWithIntegrity`;
     }
   </script>
 </body>

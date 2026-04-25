@@ -3,8 +3,6 @@
    Design System & Global Styles
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
-
 /* ── CSS VARIABLES ── */
 :root {
   --green:        #195727;
@@ -376,21 +374,28 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 24px;
+  margin-top: 28px;
   margin-bottom: 20px;
 }
 
 .apc-logo-circle {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  overflow: hidden;
   background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--green);
-  letter-spacing: -0.5px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.7);
+}
+
+.apc-logo-circle img {
+  width: 115%;
+  height: 115%;
+  object-fit: cover;
+  display: block;
 }
 
 .hero-apc-badge span {
@@ -403,25 +408,32 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
 .hero h1 { color: white; margin-bottom: 6px; line-height: 1.05; }
 .hero h1 em { font-style: italic; color: var(--gold); }
 
+/* Shrinks to the h1's natural content width; tagline aligns to same right edge */
+.hero-name-block {
+  display: table;
+}
+
 .hero-tagline {
   font-family: 'DM Mono', monospace;
-  font-size: 11.5px;
+  font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.38);
   margin-bottom: 20px;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  margin-top: 16px;
+  display: block;
+  width: 100%;
+  line-height: 1.9;
 }
 
 .hero-tagline::before {
   content: '';
-  display: inline-block;
-  width: 28px;
-  height: 1px;
+  display: block;
+  width: 32px;
+  height: 2px;
   background: var(--gold);
+  margin-bottom: 10px;
+  opacity: 0.8;
 }
 
 .hero-desc {
@@ -942,8 +954,13 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
 .footer-tagline {
   font-family: 'Cormorant Garamond', serif;
   font-size: 13px;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: rgba(245,196,28,0.55);
+}
+.footer-tagline em {
   font-style: italic;
-  color: rgba(245,196,28,0.45);
+  color: rgba(245,196,28,0.85);
 }
 
 /* ── UTILITIES ── */
@@ -982,6 +999,10 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
     width: 50%;
     height: 88%;
     opacity: 0.6;
+  }
+
+  .hero-content {
+    max-width: 480px;
   }
 }
 
@@ -1110,4 +1131,159 @@ p  { font-size: 15px; color: var(--ink-mid); line-height: 1.75; }
   .stats-bar {
     margin-top: -10px;
   }
+}
+
+
+/* ── VIDEO FACADE (Vimeo lite embed) ── */
+.video-facade {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--ink);
+  cursor: pointer;
+  margin: 36px 0;
+}
+
+.video-facade img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.video-facade:hover img {
+  transform: scale(1.02);
+  filter: brightness(0.75);
+}
+
+.video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(13, 26, 16, 0.72);
+  border: 2px solid rgba(245, 196, 28, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.video-facade:hover .video-play-btn {
+  background: var(--green);
+  border-color: var(--gold);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-play-btn svg {
+  margin-left: 4px; /* optical centering of play triangle */
+}
+
+.video-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 24px;
+  background: linear-gradient(to top, rgba(13,26,16,0.88) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.video-label .label {
+  color: var(--gold);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.video-label p {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  margin: 0;
+}
+
+.video-facade iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Inside about-strip grid column, remove default margin */
+.about-strip-image .video-block {
+  margin: 0;
+  box-shadow: var(--shadow-lg);
+}
+
+.video-block {
+  margin: 36px 0;
+}
+
+.video-block .video-facade {
+  margin: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.video-caption {
+  background: var(--ink);
+  padding: 14px 20px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.video-caption .label {
+  color: var(--gold);
+  margin-bottom: 3px;
+  display: block;
+}
+
+.video-caption p {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* About strip teaser link */
+.video-teaser-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--green);
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 14px;
+  transition: var(--transition);
+}
+
+.video-teaser-link:hover {
+  color: var(--green-mid);
+}
+
+.video-teaser-link:hover .video-teaser-icon {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+
+.video-teaser-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: var(--green);
+  transition: var(--transition);
+  flex-shrink: 0;
 }

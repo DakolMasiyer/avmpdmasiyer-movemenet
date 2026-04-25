@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /assets/css/
-Disallow: /assets/js/
-
-Sitemap: https://avmpdmasiyer-site.netlify.app/sitemap.xml

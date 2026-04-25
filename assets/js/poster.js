@@ -8,7 +8,6 @@
    - Integrates text into poster visually
    - Keeps original structure (no regressions)
    ============================================================ */
-import { fitText, MWAGHAVUL_POOL } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('poster-canvas');
@@ -27,12 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const shareWaBtn  = document.getElementById('poster-share-wa');
   const preview     = document.getElementById('poster-preview');
 
-  // Cycle the name-input placeholder through local names each session
-  if (nameInput) {
-    const sample = MWAGHAVUL_POOL[Math.floor(Math.random() * MWAGHAVUL_POOL.length)];
-    nameInput.placeholder = sample.name;
-  }
-
   let fontsReady = false;
 
   // ===== FONT LOADING =====
@@ -46,15 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
     'url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTcviYwY.woff2)'
   );
 
-  Promise.allSettled([fontPrimary.load(), fontSecondary.load()])
-    .then(results => {
-      results.forEach(r => { if (r.status === 'fulfilled') document.fonts.add(r.value); });
+  Promise.all([fontPrimary.load(), fontSecondary.load()])
+    .then(fonts => {
+      fonts.forEach(f => document.fonts.add(f));
       fontsReady = true;
-      drawPoster();
+      if (baseImg.complete && baseImg.naturalWidth > 0) drawPoster();
+    })
+    .catch(() => {
+      fontsReady = true;
+      if (baseImg.complete && baseImg.naturalWidth > 0) drawPoster();
     });
 
   // ===== BASE IMAGE =====
   const baseImg = new Image();
+  baseImg.crossOrigin = 'anonymous';
   baseImg.src = 'assets/img/poster/campaign-poster.jpg';
   baseImg.onload  = () => { if (fontsReady) drawPoster(); };
   baseImg.onerror = () => drawFallback();
@@ -67,6 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (generateBtn) generateBtn.addEventListener('click', drawPoster);
   if (downloadBtn) downloadBtn.addEventListener('click', downloadPoster);
   if (shareWaBtn)  shareWaBtn.addEventListener('click', shareViaWhatsApp);
+
+  // ===== TEXT FIT =====
+  function fitText(ctx, text, maxWidth, baseSize) {
+    let size = baseSize;
+    do {
+      ctx.font = `600 ${size}px "Playfair Display", serif`;
+      size--;
+    } while (ctx.measureText(text).width > maxWidth && size > 10);
+    return size;
+  }
 
   // ===== DRAW =====
   function drawPoster() {
@@ -105,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const leftX = Math.round(W * 0.055);
     const baseY = H - Math.round(H * 0.08);
 
-    // NAME — fitText imported from utils.js (off-by-one fixed)
+    // NAME
     let nameSize = fitText(ctx, nameLine, W * 0.82, Math.round(W * 0.045));
     ctx.font = `600 ${nameSize}px "Playfair Display", serif`;
     ctx.fillStyle = "#FFFFFF";

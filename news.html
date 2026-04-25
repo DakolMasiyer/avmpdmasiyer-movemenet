@@ -3,16 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>News &amp; Updates — PMM 2027 | AVM Paul Masiyer Movement</title>
-  <meta name="description" content="Latest news, press releases, and campaign updates from the AVM Paul Masiyer Movement — Mangu/Bokkos Federal Constituency 2027.">
+  <title>News &amp; Updates | Paul Masiyer APC Mangu/Bokkos 2027 Election</title>
+  <meta name="description" content="Latest news and updates from the AVM Paul Masiyer campaign for Mangu/Bokkos Federal Constituency House of Representatives seat. Plateau State APC 2027.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://avmpdmasiyer-site.netlify.app/news.html">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://avmpdmasiyer-site.netlify.app/news.html">
+  <meta property="og:title" content="News &amp; Media | Paul Masiyer Campaign 2027">
+  <meta property="og:description" content="Campaign updates, statements and news from AVM Paul Masiyer — Mangu/Bokkos Federal Constituency APC candidate 2027.">
+  <meta property="og:image" content="https://avmpdmasiyer-site.netlify.app/assets/img/og-home.jpg">
   <link rel="icon" type="image/svg+xml" href="assets/img/logo/pmm-favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
   <style>
-    .filter-bar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:36px;}
-    .filter-btn{padding:7px 18px;border-radius:20px;font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--transition);border:1px solid var(--border);color:var(--ink-muted);background:white;font-family:'Outfit',sans-serif;}
+    /* ── Search bar ── */
+    .search-bar{position:relative;margin-bottom:14px;}
+    .search-bar input{width:100%;padding:11px 44px 11px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:14px;color:var(--ink);background:white;outline:none;transition:var(--transition);box-sizing:border-box;}
+    .search-bar input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(25,87,39,0.08);}
+    .search-bar input::placeholder{color:var(--ink-muted);}
+    .search-bar::after{content:'⌕';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--ink-muted);pointer-events:none;}
+    /* ── Filter bar — horizontal scroll on mobile ── */
+    .filter-bar{display:flex;gap:9px;margin-bottom:12px;overflow-x:auto;white-space:nowrap;padding-bottom:4px;scrollbar-width:none;-ms-overflow-style:none;}
+    .filter-bar::-webkit-scrollbar{display:none;}
+    .filter-btn{padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--transition);border:1px solid var(--border);color:var(--ink-muted);background:white;font-family:'Outfit',sans-serif;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;}
     .filter-btn:hover,.filter-btn.active{background:var(--green);color:white;border-color:var(--green);}
+    .count-badge{font-size:10px;font-weight:600;background:rgba(0,0,0,0.12);border-radius:10px;padding:1px 6px;min-width:18px;text-align:center;line-height:1.6;}
+    .filter-btn.active .count-badge{background:rgba(255,255,255,0.22);}
+    /* ── Sort bar ── */
+    .sort-bar{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+    .sort-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;}
+    .sort-bar select{padding:7px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink);background:white;outline:none;cursor:pointer;transition:var(--transition);}
+    .sort-bar select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(25,87,39,0.08);}
+    /* ── Results count ── */
+    .results-count{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--ink-muted);margin-bottom:24px;min-height:18px;}
+    /* ── Modal ── */
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(13,26,16,0.88);z-index:2000;backdrop-filter:blur(8px);align-items:flex-start;justify-content:center;padding:36px 20px;overflow-y:auto;}
     .modal-overlay.open{display:flex;}
     .modal-box{background:white;border-radius:var(--radius-lg);max-width:740px;width:100%;position:relative;overflow:hidden;}
@@ -29,7 +55,7 @@
     .modal-body ul li{font-size:14.5px;color:var(--ink-mid);margin-bottom:7px;}
     .modal-footer{padding:22px 36px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
     .modal-footer .share-label{font-size:11.5px;color:var(--ink-muted);font-family:'DM Mono',monospace;}
-    #modal-tags{display:flex;gap:7px;flex-wrap:wrap;margin:0 36px 22px;}
+    #modal-tags{display:flex;gap:7px;flex-wrap:wrap;margin:24px 36px 20px;}
   </style>
 </head>
 <body>
@@ -53,14 +79,28 @@
 
   <section class="section" style="background:var(--cream);">
     <div class="container">
+      <div class="search-bar">
+        <input type="text" id="news-search" placeholder="Search articles…"
+               autocomplete="off" spellcheck="false" aria-label="Search news articles">
+      </div>
       <div class="filter-bar">
         <button class="filter-btn active" data-filter="all">All Updates</button>
-        <button class="filter-btn" data-filter="Announcement">Announcements</button>
-        <button class="filter-btn" data-filter="Policy">Policy</button>
-        <button class="filter-btn" data-filter="Community">Community</button>
-        <button class="filter-btn" data-filter="Youth">Youth</button>
-        <button class="filter-btn" data-filter="Profile">Profile</button>
+        <button class="filter-btn" data-filter="Security">Security</button>
+        <button class="filter-btn" data-filter="Campaign|Announcement|Movement">Campaign</button>
+        <button class="filter-btn" data-filter="Community|Humanitarian|Agriculture">Community</button>
+        <button class="filter-btn" data-filter="Analysis|Policy">Analysis</button>
+        <button class="filter-btn" data-filter="Profile|Youth">Profile</button>
       </div>
+      <div class="sort-bar">
+        <label for="news-sort" class="sort-label">Sort:</label>
+        <select id="news-sort" aria-label="Sort articles">
+          <option value="date-desc">Newest First</option>
+          <option value="date-asc">Oldest First</option>
+          <option value="alpha-asc">A → Z</option>
+          <option value="alpha-desc">Z → A</option>
+        </select>
+      </div>
+      <div id="results-count" class="results-count"></div>
       <div class="news-grid" id="news-grid">
         <div style="color:var(--ink-muted);padding:20px 0;">Loading updates...</div>
       </div>
@@ -89,7 +129,7 @@
   </div>
 
   <div data-include="components/footer.html"></div>
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/ui.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/ui.js"></script>
 </body>
 </html>

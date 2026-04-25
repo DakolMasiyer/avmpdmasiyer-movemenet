@@ -225,6 +225,7 @@ async function loadNewsPreview() {
   try {
     const res = await fetch('data/news.json');
     const news = await res.json();
+    news.sort((a, b) => b.date.localeCompare(a.date));
     container.innerHTML = news.slice(0, 3).map((item, i) => `
       <div class="news-card aos" style="transition-delay:${i * 0.1}s" onclick="void(0)">
         <div class="news-card-img">
